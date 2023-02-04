@@ -1,4 +1,4 @@
-const Course = require("../models/CourseModels");
+const Course = require("../models/courseModels");
 const ErrorHander = require("../utils/errorHander");
 const catchAsyncError = require('../middleware/catchAsyncError');
 const ApiFeatures = require("../utils/apifeatures");
