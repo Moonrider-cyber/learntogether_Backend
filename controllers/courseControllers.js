@@ -1,6 +1,7 @@
 const Course = require("../models/CourseModels");
 const ErrorHander = require("../utils/errorHander");
 const catchAsyncError = require('../middleware/catchAsyncError');
+const ApiFeatures = require("../utils/apifeatures");
 
 //create course -- Teacher
 exports.createCourse = catchAsyncError(async (req,res,next)=>{
@@ -16,7 +17,9 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
 // get all course
 exports.getAllCourse = catchAsyncError(async(req,res) =>{
     
-    const courses = await Course.find();
+    const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter();
+
+    const courses = await apiFeatures.query;
     res.status(200).json({
         success:true,
         courses
