@@ -17,12 +17,16 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
 // get all course
 exports.getAllCourse = catchAsyncError(async(req,res) =>{
     
-    const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter();
+    const resultPerPage = 5;
+    const productCount = await Course.countDocuments();
+
+    const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter().pagination(resultPerPage);
 
     const courses = await apiFeatures.query;
     res.status(200).json({
         success:true,
-        courses
+        courses,
+        productCount,
     })
 });
 
