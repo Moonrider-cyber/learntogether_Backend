@@ -14,8 +14,11 @@ exports.registerUser = catchAsyncError( async(req,res,next)=>{
             url:"profileurl",
         }
     });
+
+    const token = user.getJWTToken();
+
     res.status(201).json({
         success:true,
-        user,
+        token,
     })
 } );
