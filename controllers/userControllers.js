@@ -2,6 +2,7 @@ const ErrorHander = require('../utils/errorHander');
 const catchAsyncError = require('../middleware/catchAsyncError');
 const User = require('../models/UserModel');
 const sendToken = require('../utils/jwtToken');
+const sendEmail = require('../utils/sendEmail.js')
 
 // register user
 exports.registerUser = catchAsyncError( async(req,res,next)=>{
@@ -58,3 +59,40 @@ exports.logout = catchAsyncError(async(req,res,next)=>{
         message:"logged out"
     })
 })
+
+//  forgate pwd
+
+exports.forgotPassword = catchAsyncError(async(req,res,next)=>{
+    const user = await User.findOne({email:req.body.email});
+
+    if(!user){
+        next (new ErrorHander("User not found"),404);
+    }
+    //get ResetPassword token
+    const resetToken = user.getResetPwdToken();
+
+    await user.save({validateBeforeSave:false});
+
+    const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`;
+
+    const message = `Your password reset token in:- \n\n ${resetPasswordURL} \n\n If you have not requested this email then please ignore it 🤣`;
+
+    try {
+        await sendEmail({
+            email:user.email,
+            subject:"Busilearn Password recovery",
+            message
+        });
+
+        res.status(200).json({
+            success:true,
+            message:`email send to ${user.email} successfully`,
+        });
+    } catch (error) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        
+        await user.save({validateBeforeSave:false});
+        return next(new ErrorHander(error.message,500));
+    }
+});
