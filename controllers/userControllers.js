@@ -60,8 +60,7 @@ exports.logout = catchAsyncError(async(req,res,next)=>{
     })
 })
 
-//  forgate pwd
-
+//  forgot pwd
 exports.forgotPassword = catchAsyncError(async(req,res,next)=>{
     const user = await User.findOne({email:req.body.email});
 

@@ -36,7 +36,25 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type:String,
+        enum:["admin","user"],
         default:"user",
+    },
+    subscription:{
+        id:String,
+        status:String,
+    },
+    playlist:[
+        {
+            course:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"course",
+            },
+            poster: String
+        },
+    ],
+    createAt:{
+        type:Date,
+        default: Date.now,
     },
     resetPasswordToken : String,
     resetPasswordExpire : Date
@@ -62,14 +80,13 @@ userSchema.methods.comparePassword = async function(enterdpassword){
     return await byrypt.compare(enterdpassword,this.password);
 };
 
-module.exports = mongoose.model("User",userSchema);
 
 //genrating password reseting token
 
-userSchema.methods.getResetPwdToken =  async function(){
+userSchema.methods.getResetPwdToken = async function(){
 
     //genrating token
-    const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetToken =  crypto.randomBytes(20).toString("hex");
 
     // hasing and ading resetPasswordToken to userSchema
     this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
@@ -78,3 +95,8 @@ userSchema.methods.getResetPwdToken =  async function(){
 
     return resetToken;
 }
+
+
+
+// export
+module.exports = mongoose.model("User",userSchema);
