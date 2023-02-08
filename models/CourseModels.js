@@ -18,28 +18,29 @@ const courseSchema = new mongoose.Schema({
         required:[true,"please enter course price"],
         maxLength:[8,"price cannot exceed 8 characters"]
     },
-    lectures:{
-        title:{
-            type:Number,
-            required:[true,"please enter lectures title"],
-        },
-        desc:{
-            type:Number,
-            required:[true,"please enter lectures desc"],
-        },
-        video:[
-            {
-                public_id:{
-                    type:String,
-                    required:true
-                },
-                url:{
-                    type:String,
-                    required:true
-                }
-            }
-        ],    
-    },
+    // lectures:{
+    //     title:{
+    //         type:Number,
+    //         required:[true,"please enter lectures title"],
+    //     },
+    //     desc:{
+    //         type:Number,
+    //         required:[true,"please enter lectures desc"],
+    //     },
+    //     video:[
+    //         {
+    //             public_id:{
+    //                 type:String,
+    //                 required:true
+    //             },
+    //             url:{
+    //                 type:String,
+    //                 required:true
+    //             }
+    //         }
+    //     ],    
+    //     select:false
+    // },
     poster:[
         {
             public_id:{
@@ -88,11 +89,11 @@ const courseSchema = new mongoose.Schema({
     //         }
     //     }
     // ],
-    createBy:{
-        type:mongoose.Schema.ObjectId,
-        ref:"User",
-        required:true
-    },
+    // createBy:{
+    //     type:mongoose.Schema.ObjectId,
+    //     ref:"User",
+    //     required:true
+    // },
     createAt:{
         type:Date,
         default:Date.now

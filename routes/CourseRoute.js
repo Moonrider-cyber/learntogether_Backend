@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.route("/course").get(getAllCourse);
 
-router.route("/course/new").post(isAuthenticatedUser,autorizeRoles('admin'),createCourse);
+router.route("/course/new").post(isAuthenticatedUser,createCourse);
 
-router.route("/course/:id").put(isAuthenticatedUser,autorizeRoles('admin'),updateCourse).delete(isAuthenticatedUser,autorizeRoles('admin'),deleteCourse).get(getSingleCourse);
+router.route("/course/:id").put(isAuthenticatedUser,updateCourse).delete(isAuthenticatedUser,deleteCourse).get(getSingleCourse);
 
 
 module.exports = router
