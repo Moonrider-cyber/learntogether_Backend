@@ -18,29 +18,24 @@ const courseSchema = new mongoose.Schema({
         required:[true,"please enter course price"],
         maxLength:[8,"price cannot exceed 8 characters"]
     },
-    // lectures:{
-    //     title:{
-    //         type:Number,
-    //         required:[true,"please enter lectures title"],
-    //     },
-    //     desc:{
-    //         type:Number,
-    //         required:[true,"please enter lectures desc"],
-    //     },
-    //     video:[
-    //         {
-    //             public_id:{
-    //                 type:String,
-    //                 required:true
-    //             },
-    //             url:{
-    //                 type:String,
-    //                 required:true
-    //             }
-    //         }
-    //     ],    
-    //     select:false
-    // },
+    lectures:{
+        title:{
+            type:String,
+        },
+        desc:{
+            type:String,
+        }, 
+        video:[
+            {
+                public_id:{
+                    type:String
+                },
+                url:{
+                    type:String
+                }
+            }
+        ],    
+    },
     poster:[
         {
             public_id:{

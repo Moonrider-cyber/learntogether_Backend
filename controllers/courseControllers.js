@@ -32,16 +32,48 @@ exports.getAllCourse = catchAsyncError(async(req,res) =>{
 });
 
 // get single course 
-exports.getSingleCourse = catchAsyncError(async(req,res,next)=>{
+exports.getCourseLectures = catchAsyncError(async(req,res,next)=>{
     let course = await Course.findById(req.params.id);
 
     if(!course){
         return next(new ErrorHander("course not found",404));
     }
 
+    course.views += 1;
+    
     res.status(200).json({
         success:true,
-        course
+        lectures: course.lectures
+    })
+});
+
+// add lectures 
+exports.addCourseLectures = catchAsyncError(async(req,res,next)=>{
+
+    const {id} = req.params;
+    const {title,desc} = req.body;
+    // const {file} = req.file
+
+    let course = await Course.findById(id);
+    if(!course){
+        return next(new ErrorHander("course not found",404));
+    }
+    
+    //TODO add lectures
+
+    course.lectures.push({
+        title,
+        desc,
+        video:{
+            public_id:"url",
+            public_url:"url"
+        }
+    })
+    course.noOfVideos = course.lectures.length;
+    await course.save();
+    res.status(200).json({
+        success:true,
+        message:"lectures added in course"
     })
 });
  
