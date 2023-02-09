@@ -88,9 +88,15 @@ userSchema.methods.getResetPwdToken = async function(){
     //genrating token
     const resetToken =  crypto.randomBytes(20).toString("hex");
 
+    // console.log("reset token before encript",resetToken);
+    
+    
     // hasing and ading resetPasswordToken to userSchema
-    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-
+    this.resetPasswordToken = crypto.createHmac("sha256").update(resetToken).digest("hex");
+    
+    
+    // console.log("reset token after encript",this.resetPasswordToken);
+    
     this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
 
     return resetToken;
