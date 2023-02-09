@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
         id:String,
         status:String,
     },
-    playlist:[
+    cart:[
         {
             course:{
                 type:mongoose.Schema.Types.ObjectId,
