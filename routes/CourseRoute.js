@@ -17,7 +17,7 @@ router.route("/course/new")
 
 router.route("/course/:id")
     .put(singleUpload,autorizeRoles("admin"),isAuthenticatedUser,updateCourse)
-    .delete(autorizeRoles("admin"),isAuthenticatedUser,deleteCourse)
+    .delete(isAuthenticatedUser,deleteCourse)
     .get(isAuthenticatedUser,getCourseLectures)
     .post(singleUpload,isAuthenticatedUser,autorizeRoles("admin"),addCourseLectures);
 

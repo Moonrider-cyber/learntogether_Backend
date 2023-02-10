@@ -122,7 +122,7 @@ exports.updateCourse= catchAsyncError(async(req,res,next)=>{
     })
 });
 
-// delete product - teacher,admin
+// delete course - teacher,admin
 
 exports.deleteCourse = catchAsyncError(async(req,res,next)=>{
 
@@ -131,13 +131,18 @@ exports.deleteCourse = catchAsyncError(async(req,res,next)=>{
     if(!course){
         return next(new ErrorHander("course not found",404));
     }
+    await cloudinary.v2.uploader.destroy(course.poster[0].public_id); 
 
-    course = await Course.findByIdAndUpdate(req.params.id,req.body,{
-        new:true, runValidators:true
-    });
+    for (let i = 0; i < course.lectures.length; i++) {
+        const singleLecture = course.lectures[i];
+        // lectures not deleted in cloud TODO
+        await cloudinary.v2.uploader.destroy(singleLecture.video[0].public_id); 
+    }
+
+    await course.remove();
 
     res.status(200).json({
         success:true,
-        course
+        message:"course deleted sucessfuly"
     })
 });
