@@ -10,7 +10,6 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
     
     const {title,description,price,poster,catagory} = req.body;
 
-    console.log("start created course");
     req.body.user = req.user.id
     
     const file = req.file;
@@ -123,7 +122,6 @@ exports.updateCourse= catchAsyncError(async(req,res,next)=>{
 });
 
 // delete course - teacher,admin
-
 exports.deleteCourse = catchAsyncError(async(req,res,next)=>{
 
     let course = await Course.findById(req.params.id);
@@ -135,8 +133,9 @@ exports.deleteCourse = catchAsyncError(async(req,res,next)=>{
 
     for (let i = 0; i < course.lectures.length; i++) {
         const singleLecture = course.lectures[i];
-        // lectures not deleted in cloud TODO
-        await cloudinary.v2.uploader.destroy(singleLecture.video[0].public_id); 
+        await cloudinary.v2.uploader.destroy(singleLecture.video[0].public_id,{
+            resource_type:"video",
+        }); 
     }
 
     await course.remove();
@@ -144,5 +143,36 @@ exports.deleteCourse = catchAsyncError(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         message:"course deleted sucessfuly"
+    })
+});
+
+// delete lectures - teacher,admin
+exports.deleteLecture= catchAsyncError(async(req,res,next)=>{
+
+    const {courseId,lectureId} = req.query;
+
+    let course = await Course.findById(courseId);
+
+    if(!course){
+        return next(new ErrorHander("course not found",404));
+    }
+    
+    const lecture = course.lectures.find((item)=>{
+        if(item._id.toString() === lectureId.toString()) return item;
+    })
+    await cloudinary.v2.uploader.destroy(lecture.video[0].public_id,{
+        resource_type:"video",
+    });
+    
+    course.lectures.filter(item=>{
+        if(item._id.toString() !== lectureId.toString()) return item;
+    })
+    course.noOfVideos = course.lectures.length;
+    await course.save();
+    console.log(course.lectures[0].video)
+
+    res.status(200).json({
+        success:true,
+        message:"lectures deleted sucessfuly"
     })
 });
