@@ -18,7 +18,8 @@ const courseSchema = new mongoose.Schema({
         required:[true,"please enter course price"],
         maxLength:[8,"price cannot exceed 8 characters"]
     },
-    lectures:{
+    lectures:[
+    {
         title:{
             type:String,
         },
@@ -35,7 +36,8 @@ const courseSchema = new mongoose.Schema({
                 }
             }
         ],    
-    },
+    }
+],
     poster:[
         {
             public_id:{

@@ -9,10 +9,16 @@ const singleUpload = multer({storage:multer.memoryStorage()}).single("file");
 
 const router = express.Router();
 
-router.route("/course").get(getAllCourse);
+router.route("/course")
+    .get(getAllCourse);
 
-router.route("/course/new").post(singleUpload,isAuthenticatedUser,autorizeRoles("admin"),createCourse);
+router.route("/course/new")
+    .post(singleUpload,isAuthenticatedUser,autorizeRoles("admin"),createCourse);
 
-router.route("/course/:id").put(isAuthenticatedUser,updateCourse).delete(isAuthenticatedUser,deleteCourse).get(getCourseLectures).post(addCourseLectures);
+router.route("/course/:id")
+    .put(singleUpload,autorizeRoles("admin"),isAuthenticatedUser,updateCourse)
+    .delete(autorizeRoles("admin"),isAuthenticatedUser,deleteCourse)
+    .get(isAuthenticatedUser,getCourseLectures)
+    .post(singleUpload,isAuthenticatedUser,autorizeRoles("admin"),addCourseLectures);
 
 module.exports = router
