@@ -2,13 +2,33 @@ const Course = require("../models/courseModels");
 const ErrorHander = require("../utils/errorHander");
 const catchAsyncError = require('../middleware/catchAsyncError');
 const ApiFeatures = require("../utils/apifeatures");
+const cloudinary = require('cloudinary');
+const getDataUri = require("../utils/datauri");
 
 //create course -- Teacher
 exports.createCourse = catchAsyncError(async (req,res,next)=>{
     
+    const {title,description,price,poster,catagory} = req.body;
+
+    console.log("start created course");
     req.body.user = req.user.id
     
-    const course = await Course.create(req.body);
+    const file = req.file;
+    const fileUri = getDataUri(file);
+
+    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
+    const course = await Course.create({
+        title,
+        description,
+        price,
+        catagory,
+        poster:{
+            public_id:mycloud.public_id,
+            url:mycloud.secure_url,
+        },
+    });
+
     res.status(201).json({
         success:true,
         course
