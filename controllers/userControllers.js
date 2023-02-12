@@ -4,17 +4,27 @@ const User = require('../models/UserModel');
 const Course = require('../models/courseModels');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail.js');
+const cloudinary = require('cloudinary');
+const getDataUri = require("../utils/datauri");
 
 // register user
 exports.registerUser = catchAsyncError( async(req,res,next)=>{
 
     const {name,email,password} = req.body;
+    const file = req.file;
 
-    const user = await User.create({
+    if(!name || !email || !password || !file) return next(new ErrorHander("Please enter all field",400));
+    let user = await User.findOne({ email });
+    if(user) return next(new ErrorHander("User Already Exist",409));
+
+    const fileUri = getDataUri(file);
+    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
+    user = await User.create({
         name,email,password,
         avatar:{
-            public_id:"this is simple id",
-            url:"profileurl",
+            public_id:mycloud.public_id,
+            url:mycloud.secure_url,
         }
     });
 
@@ -99,6 +109,28 @@ exports.updateProfile = catchAsyncError(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         message:"profile change successfully"
+    })
+});
+
+// update profilePicture
+exports.updateProfilePicture = catchAsyncError(async(req,res,next)=>{
+    
+    const user = await User.findById(req.user.id);
+
+    const file = req.file;
+    const fileUri = getDataUri(file);
+
+    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+    
+    user.avatar = {
+        public_id:mycloud.public_id,
+        url:mycloud.secure_url,
+    }
+
+    res.status(200).json({
+        success:true,
+        message:"profile Picture change successfully"
     })
 });
 
@@ -237,4 +269,54 @@ exports.removeFromCart = catchAsyncError(async(req,res,next)=>{
         success:true,
         message:"remove to cart"
     })
-})
+}) 
+
+// get all user information -admin 
+exports.getAllUsers = catchAsyncError(async(req,res,next)=>{
+
+    let users = await User.find();
+    if(!users){
+        return next(new ErrorHander("somting went wrong",404));
+    }
+
+    res.status(200).json({
+        success:true,
+        users
+    })
+});
+
+// update user role
+exports.updateUserRole = catchAsyncError(async(req,res,next)=>{
+
+    let user = await User.findById(req.params.id)
+    if(!user){
+        return next(new ErrorHander("somting went wrong",404));
+    }
+
+    if(user.role==="user") user.role="admin"
+    else user.role="user"
+
+    await user.save();
+
+    res.status(200).json({
+        success:true,
+        message:"role updated"
+    })
+});
+// delete user
+exports.deleteUser = catchAsyncError(async(req,res,next)=>{
+
+    let user = await User.findById(req.params.id)
+
+    if(!user){
+        return next(new ErrorHander("user not found",404));
+    }
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id); 
+
+    await user.remove();
+
+    res.status(200).json({
+        success:true,
+        message:"user delete successfully"
+    })
+});
