@@ -22,6 +22,8 @@ const userroute = require("./routes/UserRoute")
 app.use("/api/v1",courseroute);
 app.use("/api/v1",userroute);
 
+app.use("/", (req, res) => { res.send(`server is working frontend in ${process.env.FRONTEND_URL}`); });
+
 // Middleware for errors
 app.use(errorMiddleware);
 
