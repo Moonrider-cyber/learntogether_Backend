@@ -1,9 +1,9 @@
-const app = require('./app.js');
+// const app = require('./app.js');
 // const dotenv = require('dotenv');
 // const connectDatabase = require("./config/database")
 // const cloudinary = require("cloudinary")
 
-// Handling Uncaught exception
+// // Handling Uncaught exception
 // process.on("uncaughtException",err=>{
 //     console.log(`error: ${err.message}`);
 
@@ -12,10 +12,10 @@ const app = require('./app.js');
 // });
 
 
-// config
+// // config
 // dotenv.config({path:"config.env"});
 
-// connect database
+// // connect database
 // connectDatabase();
 
 // cloudinary.v2.config({
@@ -29,11 +29,11 @@ const app = require('./app.js');
 
 
 
-const server = app.listen(8000,()=>{
-    console.log('server runing on 8000');
-})
+// const server = app.listen(8000,()=>{
+//     console.log('server runing on 8000');
+// })
 
-// unhandled Promise Rejection
+// // unhandled Promise Rejection
 // process.on('unhandledRejection',err=>{
 //     console.log(`error: ${err.message}`);
 //     console.log("shutting down the server due to unhadled promise rejection");
@@ -42,3 +42,10 @@ const server = app.listen(8000,()=>{
 //         process.exit(1);
 //     });
 // });
+
+const app = require('./app.js');
+
+
+const server = app.listen(8000,()=>{
+    console.log('server runing on 8000');
+})
