@@ -29,7 +29,7 @@ dotenv.config({path:"config.env"});
 
 
 
-const server = app.listen(process.env.PORT,()=>{
+const server = app.listen(8000,()=>{
     console.log('server runing on',process.env.PORT);
 })
 
