@@ -7,7 +7,7 @@ const errorMiddleware = require('./middleware/error');
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
@@ -19,10 +19,13 @@ app.use(cors({
 const courseroute = require("./routes/CourseRoute")
 const userroute = require("./routes/UserRoute")
 
+app.get("/", (req, res) => { 
+    res.send(`server is working frontend in ${process.env.FRONTEND_URL}`); 
+});
+
 app.use("/api/v1",courseroute);
 app.use("/api/v1",userroute);
 
-app.get("/", (req, res) => { res.send(`server is working frontend in ${process.env.FRONTEND_URL}`); });
 
 // Middleware for errors
 app.use(errorMiddleware);
