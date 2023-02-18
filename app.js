@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // const userroute = require("./routes/UserRoute")
 
 app.get("/", (req, res) => { 
-    res.send(`server is working frontend in ${process.env.FRONTEND_URL}`); 
+    res.send(`server is working frontend in`); 
 });
 
 // app.use("/api/v1",courseroute);
