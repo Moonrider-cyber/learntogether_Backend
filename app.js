@@ -1,19 +1,19 @@
 const express = require("express");
 const app = express();
-const cookieParser = require('cookie-parser')
-const cors = require('cors');
+// const cookieParser = require('cookie-parser')
+// const cors = require('cors');
 
 // const errorMiddleware = require('./middleware/error');
 
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+// app.use(express.json());
+// app.use(cookieParser());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(cors({
+//     origin: process.env.FRONTEND_URL,
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     
-}));
+// }));
 
 // route imports
 // const courseroute = require("./routes/CourseRoute")
