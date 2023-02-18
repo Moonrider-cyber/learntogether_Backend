@@ -1,5 +1,5 @@
 const app = require('./app.js');
-// const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 // const connectDatabase = require("./config/database")
 // const cloudinary = require("cloudinary")
 
@@ -12,8 +12,8 @@ const app = require('./app.js');
 // });
 
 
-//config
-// dotenv.config({path:"config.env"});
+config
+dotenv.config({path:"config.env"});
 
 // connect database
 // connectDatabase();
