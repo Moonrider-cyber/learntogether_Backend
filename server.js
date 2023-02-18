@@ -12,7 +12,7 @@ const dotenv = require('dotenv');
 // });
 
 
-config
+// config
 dotenv.config({path:"config.env"});
 
 // connect database
