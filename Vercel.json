@@ -1,6 +1,6 @@
 {
     "version": "2",
-    "name": "native-server",
+    "name": "busilearn-server",
     "builds": [
         {
             "src": "server.js",
