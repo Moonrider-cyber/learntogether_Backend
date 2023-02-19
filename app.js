@@ -1,13 +1,13 @@
-const express = require("express");
+import express, { json, urlencoded } from "express";
 const app = express();
 // const cookieParser = require('cookie-parser')
 // const cors = require('cors');
 
 // const errorMiddleware = require('./middleware/error');
 
-app.use(express.json());
+app.use(json());
 // app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 // app.use(cors({
 //     origin: process.env.FRONTEND_URL,
 //     credentials: true,
@@ -22,7 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => { 
     res.send(`server is working frontend in`); 
 });
-
+app.use("/", (req, res) => {
+    res.json(`from app.use is working`);
+});
 // app.use("/api/v1",courseroute);
 // app.use("/api/v1",userroute);
 
@@ -30,5 +32,5 @@ app.get("/", (req, res) => {
 // Middleware for errors
 // app.use(errorMiddleware);
 
-module.exports = app
+export default app
 
