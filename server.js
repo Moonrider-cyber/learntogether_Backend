@@ -24,7 +24,7 @@ dotenv.config({path:"config.env"});
 //     api_secret:process.env.CLOUDINARY_API_SECRET,
 // });
 
-
+console.log("runing");
 
 const server = app.listen(8000,()=>{
     console.log('server runing on 8000');
