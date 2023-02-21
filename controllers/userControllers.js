@@ -53,7 +53,7 @@ exports.loginUser = catchAsyncError (async(req,res,next)=>{
         return next(new ErrorHander("Invalid email or password",401));
     }
 
-    sendToken(user,200,res,"login successfull");
+    sendToken(user,200,res);
 
 });
 

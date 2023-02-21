@@ -142,7 +142,7 @@ exports.deleteCourse = catchAsyncError(async(req,res,next)=>{
 
     res.status(200).json({
         success:true,
-        message:"course deleted sucessfuly"
+        message:"course deleted successfuly"
     })
 });
 
@@ -173,6 +173,6 @@ exports.deleteLecture= catchAsyncError(async(req,res,next)=>{
 
     res.status(200).json({
         success:true,
-        message:"lectures deleted sucessfuly"
+        message:"lectures deleted successfuly"
     })
 });

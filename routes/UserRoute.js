@@ -18,6 +18,7 @@ router.route("/resetpassword/:token").put( isAuthenticatedUser, resetPassword);
 router.route("/logout").post(logout);
 router.route("/me").post( isAuthenticatedUser, getMyProfile);
 
+
 // change password from profile
 router.route("/changepassword").put( isAuthenticatedUser, changePassword);
 router.route("/updateprofile").put( isAuthenticatedUser, updateProfile);
