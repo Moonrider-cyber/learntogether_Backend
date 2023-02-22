@@ -7,7 +7,9 @@ exports.isAuthenticatedUser = catchAsyncError(async(req,res,next)=>{
     const { token } = req.cookies;
     
     if(!token){
-        return next(new ErrorHander("Please Login to access this recourse",401));
+        return res.status(401).json({
+            success:false,
+        })
     }
 
     const decodeData = jwt.verify(token,process.env.JWT_SECRET);
