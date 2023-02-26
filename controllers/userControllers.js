@@ -53,7 +53,7 @@ exports.loginUser = catchAsyncError (async(req,res,next)=>{
         return next(new ErrorHander("Invalid email or password",401));
     }
 
-    sendToken(user,200,res);
+    sendToken(user,200,res,"Login Successfully");
 
 });
 
@@ -67,7 +67,7 @@ exports.logout = catchAsyncError(async(req,res,next)=>{
     })
     res.status(200).json({
         success:true,
-        message:"logged out"
+        message:"logged out successfully"
     })
 })
 
