@@ -30,7 +30,7 @@ exports.registerUser = catchAsyncError( async(req,res,next)=>{
 
     const token = user.getJWTToken();
 
-    sendToken(user,201,res);
+    sendToken(user,201,res,"Signup Successfully");
 } );
 
 //login user
