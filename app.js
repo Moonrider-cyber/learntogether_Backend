@@ -32,6 +32,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1",courseroute);
 app.use("/api/v1",userroute);
 
+console.log("hello world app page");
 
 // Middleware for errors
 app.use(errorMiddleware);
