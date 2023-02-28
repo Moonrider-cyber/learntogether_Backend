@@ -8,7 +8,7 @@ process.on("uncaughtException",err=>{
 
     console.log("shutting down the server due to Uncaught exception");
     process.exit(1);
-});
+}); 
 
 console.log("hello world server page");
 
