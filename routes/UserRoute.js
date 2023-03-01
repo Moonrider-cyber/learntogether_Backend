@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, loginAdmin } = require('../controllers/userControllers');
-const { isAuthenticatedUser, autorizeRoles } = require('../middleware/auth');
+const { isAuthenticatedUser, autorizeRoles, isAuthenticatedAdmin } = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
 
@@ -18,6 +18,7 @@ router.route("/forgotpassword").post(forgotPassword);
 router.route("/resetpassword/:token").put( isAuthenticatedUser, resetPassword);
 router.route("/logout").post(logout);
 router.route("/me").post( isAuthenticatedUser, getMyProfile);
+router.route("/admin/me").post( isAuthenticatedAdmin, getMyProfile);
 
 
 // change password from profile

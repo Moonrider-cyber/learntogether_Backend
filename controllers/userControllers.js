@@ -81,7 +81,7 @@ exports.loginAdmin = catchAsyncError (async(req,res,next)=>{
         return next(new ErrorHander("Invalid email or password",401));
     }
     
-    sendToken(user,200,res,"Login Successfully");
+    sendToken(user,200,res,"Login Successfully","admintoken");
     
 
 });
