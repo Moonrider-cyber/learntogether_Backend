@@ -28,6 +28,8 @@ exports.registerUser = catchAsyncError( async(req,res,next)=>{
         }
     });
 
+    
+
     const token = user.getJWTToken();
 
     sendToken(user,201,res,"Signup Successfully");
@@ -52,8 +54,35 @@ exports.loginUser = catchAsyncError (async(req,res,next)=>{
     if(!isPwdMatch){
         return next(new ErrorHander("Invalid email or password",401));
     }
-
     sendToken(user,200,res,"Login Successfully");
+
+});
+//admin login user
+exports.loginAdmin = catchAsyncError (async(req,res,next)=>{
+    const {email,password} = req.body
+
+    // checking if user given pwd and email
+    if(!email || !password){
+        return next(new ErrorHander("Plese Enter Email & Password"))
+    }
+
+    const user = await User.findOne({email}).select("+password");
+
+    if(!user){
+        return next(new ErrorHander("Invalid email or password",401));
+    }
+    if(user.role == 'user'){
+        return next(new ErrorHander("Invalid email or password",401));
+    }
+
+    const isPwdMatch = await user.comparePassword(password);
+    
+    if(!isPwdMatch){
+        return next(new ErrorHander("Invalid email or password",401));
+    }
+    
+    sendToken(user,200,res,"Login Successfully");
+    
 
 });
 

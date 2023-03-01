@@ -10,7 +10,6 @@ process.on("uncaughtException",err=>{
     process.exit(1);
 }); 
 
-console.log("hello world server page");
 
 // connect database
 connectDatabase();

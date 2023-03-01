@@ -11,6 +11,8 @@ const sendToken = (user,statusCode,res,message)=>{
         // sameSite:'none'
     }
 
+
+
     res.status(statusCode).cookie('token',token,options).json({
         success:true,
         token,

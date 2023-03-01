@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser } = require('../controllers/userControllers');
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, loginAdmin } = require('../controllers/userControllers');
 const { isAuthenticatedUser, autorizeRoles } = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
@@ -11,6 +11,7 @@ const singleUpload = multer({storage:multer.memoryStorage()}).single("avatar");
 
 router.route("/register").post(singleUpload,registerUser);
 router.route("/login").post(loginUser);
+router.route("/admin/login").post(loginAdmin);
 
 // forgot password send reset token via email
 router.route("/forgotpassword").post(forgotPassword);
