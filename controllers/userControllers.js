@@ -58,7 +58,7 @@ exports.loginUser = catchAsyncError (async(req,res,next)=>{
 
 });
 //admin login user
-exports.loginAdmin = catchAsyncError (async(req,res,next)=>{
+exports.Adminlogin = catchAsyncError (async(req,res,next)=>{
     const {email,password} = req.body
 
     // checking if user given pwd and email
@@ -90,6 +90,19 @@ exports.loginAdmin = catchAsyncError (async(req,res,next)=>{
 exports.logout = catchAsyncError(async(req,res,next)=>{
 
     res.cookie("token", null ,{
+        expires: new Date(Date.now()),
+        httpOnly:true
+
+    })
+    res.status(200).json({
+        success:true,
+        message:"logged out successfully"
+    })
+})
+//Admin logout user
+exports.Adminlogout = catchAsyncError(async(req,res,next)=>{
+
+    res.cookie("admintoken", null ,{
         expires: new Date(Date.now()),
         httpOnly:true
 
