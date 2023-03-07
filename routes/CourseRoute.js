@@ -1,6 +1,6 @@
 const express = require('express');
 const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture } = require('../controllers/coursecontrollers');
-const { isAuthenticatedUser, autorizeRoles } = require('../middleware/Auth');
+const { autorizeRoles, isAuthenticatedAdmin } = require('../middleware/Auth');
 const router = express.Router();
 // const  { singleupload }  = require('../middleware/multer.js');
 
@@ -13,13 +13,14 @@ router.route("/course")
     .get(getAllCourse);
 
 router.route("/course/new")
-    .post(singleUpload,isAuthenticatedUser,autorizeRoles("admin"),createCourse);
+    // .post(singleUpload,isAuthenticatedAdmin,autorizeRoles("admin"),createCourse);
+    .post(singleUpload,createCourse);
 
 router.route("/course/:id")
-    .put(singleUpload,isAuthenticatedUser,autorizeRoles("admin"),updateCourse)
-    .delete(isAuthenticatedUser,autorizeRoles("admin"),deleteCourse)
-    .get(isAuthenticatedUser,getCourseLectures)
-    .post(singleUpload,isAuthenticatedUser,autorizeRoles("admin"),addCourseLectures);
+    .put(singleUpload,isAuthenticatedAdmin,updateCourse)
+    .delete(deleteCourse)
+    .get(isAuthenticatedAdmin,getCourseLectures)
+    .post(singleUpload,isAuthenticatedAdmin,addCourseLectures);
 
 router.route("/lecture")
     .delete(deleteLecture);

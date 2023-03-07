@@ -20,7 +20,6 @@ exports.isAuthenticatedUser = catchAsyncError(async(req,res,next)=>{
 });
 exports.isAuthenticatedAdmin = catchAsyncError(async(req,res,next)=>{
     const { admintoken } = req.cookies;
-    
     if(!admintoken){
         return res.status(401).json({
             success:false,

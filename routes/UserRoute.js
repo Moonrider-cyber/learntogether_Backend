@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin } = require('../controllers/userControllers');
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole } = require('../controllers/userControllers');
 const { isAuthenticatedUser, autorizeRoles, isAuthenticatedAdmin } = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
@@ -10,6 +10,7 @@ const singleUpload = multer({storage:multer.memoryStorage()}).single("avatar");
 
 
 router.route("/register").post(singleUpload,registerUser);
+router.route("/admin/addwithrole").post(singleUpload,addWithRole);
 router.route("/login").post(loginUser);
 router.route("/admin/login").post(Adminlogin);
 
@@ -29,11 +30,11 @@ router.route("/updateprofilepicture").put(singleUpload, isAuthenticatedUser, upd
 router.route("/addtocart").post( isAuthenticatedUser, addToCart);
 router.route("/removefromcart").delete( isAuthenticatedUser, removeFromCart);
 
-//get all user data -admin
-router.route("/admin/users").post(isAuthenticatedUser,autorizeRoles('admin'),getAllUsers);
+//get all user data -admin``
+router.route("/admin/users").post(isAuthenticatedAdmin,autorizeRoles('admin'),getAllUsers);
 router.route("/admin/users/:id")
-    .put(isAuthenticatedUser,autorizeRoles('admin'),updateUserRole)
-    .delete(isAuthenticatedUser,autorizeRoles('admin'),deleteUser)
+    .put(isAuthenticatedAdmin,autorizeRoles('admin'),updateUserRole)
+    .delete(deleteUser)
 
 
 module.exports = router; 

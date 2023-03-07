@@ -10,7 +10,7 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
     
     const {title,description,price,poster,catagory} = req.body;
 
-    req.body.user = req.user.id
+    // req.body.user = req.user.id
     
     const file = req.file;
     const fileUri = getDataUri(file);

@@ -28,11 +28,38 @@ exports.registerUser = catchAsyncError( async(req,res,next)=>{
         }
     });
 
-    
-
     const token = user.getJWTToken();
 
     sendToken(user,201,res,"Signup Successfully");
+} );
+
+
+// add admin
+exports.addWithRole = catchAsyncError( async(req,res,next)=>{
+
+    const {name,email,password,role = "user"} = req.body;
+    const file = req.file;
+
+    if(!name || !email || !password || !file) return next(new ErrorHander("Please enter all field",400));
+    let user = await User.findOne({ email });
+    if(user) return next(new ErrorHander("User Already Exist",409));
+
+    const fileUri = getDataUri(file);
+    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
+    // let role = "admin";
+    user = await User.create({
+        name,email,password,role,
+        avatar:{
+            public_id:mycloud.public_id,
+            url:mycloud.secure_url,
+        }
+    });
+
+    res.status(201).json({
+        success:true,
+        message:"Admin added successfully"
+    });
 } );
 
 //login user
