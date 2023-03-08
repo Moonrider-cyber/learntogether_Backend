@@ -73,9 +73,10 @@ exports.loginUser = catchAsyncError (async(req,res,next)=>{
 
     const user = await User.findOne({email}).select("+password");
 
-    if(!user){
+    if(!user || user.role == 'sub-admin' || user.role == 'admin' || user.role == 'instuctor'){
         return next(new ErrorHander("Invalid email or password",401));
     }
+
     const isPwdMatch = await user.comparePassword(password);
 
     if(!isPwdMatch){
@@ -95,13 +96,9 @@ exports.Adminlogin = catchAsyncError (async(req,res,next)=>{
 
     const user = await User.findOne({email}).select("+password");
 
-    if(!user){
+    if(!user || user.role == 'user' || user.role == 'instuctor'){
         return next(new ErrorHander("Invalid email or password",401));
     }
-    if(user.role == 'user'){
-        return next(new ErrorHander("Invalid email or password",401));
-    }
-
     const isPwdMatch = await user.comparePassword(password);
     
     if(!isPwdMatch){
@@ -387,5 +384,22 @@ exports.deleteUser = catchAsyncError(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         message:"user delete successfully"
+    })
+});
+
+// active deactive user
+exports.activeDeactiveUser = catchAsyncError(async(req,res,next)=>{
+    let user = await User.findById(req.params.id)
+    if(!user){
+        return next(new ErrorHander("user not found",404));
+    }
+    if(user.active == true) user.active=false
+    else user.active=true
+
+    await user.save();
+
+    res.status(200).json({
+        success:true,
+        message:"user behavior change successfully"
     })
 });

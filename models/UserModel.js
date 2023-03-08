@@ -36,8 +36,12 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["admin","user","instructor"],
+        enum:["super-admin","sub-admin","user","instructor"],
         default:"user",
+    },
+    active:{
+        type:Boolean,
+        default:true,
     },
     subscription:{
         id:String,

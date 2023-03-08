@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole } = require('../controllers/userControllers');
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser } = require('../controllers/userControllers');
 const { isAuthenticatedUser, autorizeRoles, isAuthenticatedAdmin } = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
@@ -21,6 +21,7 @@ router.route("/logout").post(logout);
 router.route("/admin/logout").post(Adminlogout);
 router.route("/me").post( isAuthenticatedUser, getMyProfile);
 router.route("/admin/me").post( isAuthenticatedAdmin, getMyProfile);
+router.route("/admin/controluser/:id").post( isAuthenticatedAdmin, activeDeactiveUser);
 
 
 // change password from profile
@@ -31,9 +32,9 @@ router.route("/addtocart").post( isAuthenticatedUser, addToCart);
 router.route("/removefromcart").delete( isAuthenticatedUser, removeFromCart);
 
 //get all user data -admin``
-router.route("/admin/users").post(isAuthenticatedAdmin,autorizeRoles('admin'),getAllUsers);
+router.route("/admin/users").post(isAuthenticatedAdmin,getAllUsers);
 router.route("/admin/users/:id")
-    .put(isAuthenticatedAdmin,autorizeRoles('admin'),updateUserRole)
+    .put(isAuthenticatedAdmin,updateUserRole)
     .delete(deleteUser)
 
 
