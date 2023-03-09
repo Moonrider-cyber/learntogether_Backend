@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture } = require('../controllers/coursecontrollers');
+const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture, activeDeactiveCourse } = require('../controllers/coursecontrollers');
 const { autorizeRoles, isAuthenticatedAdmin } = require('../middleware/Auth');
 const router = express.Router();
 // const  { singleupload }  = require('../middleware/multer.js');
@@ -24,6 +24,8 @@ router.route("/course/:id")
 
 router.route("/lecture")
     .delete(deleteLecture);
-
+    
+router.route("/admin/controlcourse/:id")
+    .post(activeDeactiveCourse);
 
 module.exports = router 

@@ -10,7 +10,7 @@ const courseSchema = new mongoose.Schema({
     },
     description:{
         type:String,
-        required:[true,"please enter course desc"],    
+        required:[true,"please enter course description"],    
         minLength:[20,"Password should have more then 20 charaters"]
     },
     price:{
@@ -62,6 +62,10 @@ const courseSchema = new mongoose.Schema({
         type:String,
         required:[true,"please enter course catagory"]
     },
+    active:{
+        type:Boolean,
+        default:true,
+    },
     // rating:{
     //     type:Number,
     //     default:0
@@ -70,27 +74,27 @@ const courseSchema = new mongoose.Schema({
         type:Number,
         default:0
     },
-    // reviews:[
-    //     {
-    //         name:{
-    //             type:String,
-    //             required:true        
-    //         },
-    //         rating:{
-    //             type:String,
-    //             required:true        
-    //         },
-    //         Comment:{
-    //             type:String,
-    //             required:true        
-    //         }
-    //     }
-    // ],
-    // createBy:{
-    //     type:mongoose.Schema.ObjectId,
-    //     ref:"User",
-    //     required:true
-    // },
+    reviews:[
+        {
+            name:{
+                type:String,
+                required:true        
+            },
+            rating:{
+                type:String,
+                required:true        
+            },
+            Comment:{
+                type:String,
+                required:true        
+            }
+        }
+    ],
+    createBy:{
+        type:mongoose.Schema.ObjectId,
+        ref:"User",
+        required:true
+    },
     createAt:{
         type:Date,
         default:Date.now

@@ -8,7 +8,7 @@ const getDataUri = require("../utils/datauri");
 //create course -- Teacher
 exports.createCourse = catchAsyncError(async (req,res,next)=>{
     
-    const {title,description,price,poster,catagory} = req.body;
+    const {title,description,price,poster,catagory,createBy} = req.body;
 
     // req.body.user = req.user.id
     
@@ -22,6 +22,7 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
         description,
         price,
         catagory,
+        createBy,
         poster:{
             public_id:mycloud.public_id,
             url:mycloud.secure_url,
@@ -174,5 +175,22 @@ exports.deleteLecture= catchAsyncError(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         message:"lectures deleted successfuly"
+    })
+});
+
+// active deactive user
+exports.activeDeactiveCourse = catchAsyncError(async(req,res,next)=>{
+    let course = await Course.findById(req.params.id)
+    if(!course){
+        return next(new ErrorHander("course not found",404));
+    }
+    if(course.active == true) course.active=false
+    else course.active=true
+
+    await course.save();
+
+    res.status(200).json({
+        success:true,
+        message:"course behavior change successfully"
     })
 });
