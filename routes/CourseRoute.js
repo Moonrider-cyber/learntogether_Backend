@@ -20,7 +20,7 @@ router.route("/course/:id")
     .put(singleUpload,isAuthenticatedAdmin,updateCourse)
     .delete(deleteCourse)
     .get(isAuthenticatedAdmin,getCourseLectures)
-    .post(singleUpload,isAuthenticatedAdmin,addCourseLectures);
+    .post(singleUpload,addCourseLectures);
 
 router.route("/lecture")
     .delete(deleteLecture);

@@ -24,6 +24,7 @@ app.use(cors({
 // route imports
 const courseroute = require("./routes/CourseRoute")
 const userroute = require("./routes/UserRoute")
+const categoryroute = require("./routes/CategoryRoute")
 
 app.get("/", (req, res) => { 
     res.send(`server is working frontend in`); 
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1",courseroute);
 app.use("/api/v1",userroute);
+app.use("/api/v1",categoryroute);
 
 // Middleware for errors
 app.use(errorMiddleware);

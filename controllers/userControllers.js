@@ -58,7 +58,7 @@ exports.addWithRole = catchAsyncError( async(req,res,next)=>{
 
     res.status(201).json({
         success:true,
-        message:"Admin added successfully"
+        message:`${role} added successfully`
     });
 } );
 

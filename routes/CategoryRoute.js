@@ -6,10 +6,10 @@ const router = express.Router();
 router.route("/category")
     .get(getAllCategory);
 
-router.route("/category/new")
+router.route("/admin/category/new")
     .post(createCategory);
 
-router.route("/category/:id")
+router.route("/admin/category/:id")
     .put(isAuthenticatedAdmin,updateCategory)
     .delete(deleteCategory)
 

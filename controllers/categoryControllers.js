@@ -1,18 +1,15 @@
-const Category = require("../models/CategoryModels");
+const Category = require("../models/categoryModel");
 const ErrorHander = require("../utils/errorHander");
 const catchAsyncError = require('../middleware/catchAsyncError');
-const ApiFeatures = require("../utils/apifeatures");
-const cloudinary = require('cloudinary');
-const getDataUri = require("../utils/datauri");
 
 //create Category -- Teacher
 exports.createCategory = catchAsyncError(async (req,res,next)=>{
     
-    const {title,description,createBy} = req.body;
+    const {name,description,createBy} = req.body;
 
 
     const category = await Category.create({
-        title,
+        name,
         description,
         createBy,
     });
@@ -69,7 +66,7 @@ exports.deleteCategory = catchAsyncError(async(req,res,next)=>{
         return next(new ErrorHander("Category not found",404));
     }
     
-    await Category.remove();
+    await category.remove();
 
     res.status(200).json({
         success:true,
@@ -80,14 +77,14 @@ exports.deleteCategory = catchAsyncError(async(req,res,next)=>{
 
 // active deactive user
 exports.activeDeactiveCategory = catchAsyncError(async(req,res,next)=>{
-    let Category = await Category.findById(req.params.id)
-    if(!Category){
+    let category = await Category.findById(req.params.id)
+    if(!category){
         return next(new ErrorHander("Category not found",404));
     }
-    if(Category.active == true) Category.active=false
-    else Category.active=true
+    if(category.active == true) category.active=false
+    else category.active=true
 
-    await Category.save();
+    await category.save();
 
     res.status(200).json({
         success:true,

@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const categorySchema = new mongoose.Schema({
     name:{
         type:String,
-        required:[true,"please enter category title"],
-        minLength:[4,"Password should have more then 4 charaters"],
-        maxLength:[20,"price cannot exceed 80 characters"],
+        required:[true,"please enter category name"],
+        minLength:[4,"category name should have more then 4 charaters"],
+        maxLength:[20,"category cannot exceed 20 characters"],
         trim:true
     },
     active:{
@@ -14,8 +14,8 @@ const categorySchema = new mongoose.Schema({
     },
     description:{
         type:String,
-        required:[true,"please enter course description"],    
-        minLength:[30,"Password should have more then 30 charaters"]
+        required:[true,"please enter category description"],    
+        minLength:[10,"catagory should have more then 10 charaters"]
     },
     createBy:{
         type:mongoose.Schema.ObjectId,
@@ -28,4 +28,4 @@ const categorySchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("course",categorySchema);
+module.exports = mongoose.model("catagory",categorySchema);
