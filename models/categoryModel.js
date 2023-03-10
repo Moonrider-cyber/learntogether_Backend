@@ -17,11 +17,19 @@ const categorySchema = new mongoose.Schema({
         required:[true,"please enter category description"],    
         minLength:[10,"catagory should have more then 10 charaters"]
     },
-    createBy:{
-        type:mongoose.Schema.ObjectId,
-        ref:"User",
-        required:true
-    },
+    createBy:[
+        {
+            creatorid:{
+                type:mongoose.Schema.ObjectId,
+                ref:"User",
+                required:true
+            },
+            name:{
+                type:String,
+                required:true
+            },
+        }
+    ],
     createAt:{
         type:Date,
         default:Date.now

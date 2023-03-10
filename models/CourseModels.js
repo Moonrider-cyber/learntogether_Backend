@@ -90,11 +90,19 @@ const courseSchema = new mongoose.Schema({
             }
         }
     ],
-    createBy:{
-        type:mongoose.Schema.ObjectId,
-        ref:"User",
-        required:true
-    },
+    createBy:[
+        {
+            creatorid:{
+                type:mongoose.Schema.ObjectId,
+                ref:"User",
+                required:true
+            },
+            name:{
+                type:String,
+                required:true
+            },
+        }
+    ],
     createAt:{
         type:Date,
         default:Date.now
