@@ -4,14 +4,14 @@ const courseSchema = new mongoose.Schema({
     title:{
         type:String,
         required:[true,"please enter course title"],
-        minLength:[4,"Password should have more then 4 charaters"],
-        maxLength:[80,"price cannot exceed 80 characters"],
+        minLength:[10,"Title should have more then 4 charaters"],
+        maxLength:[30,"title cannot exceed 30 characters"],
         trim:true
     },
     description:{
         type:String,
         required:[true,"please enter course description"],    
-        minLength:[20,"Password should have more then 20 charaters"]
+        minLength:[20,"description should have more then 20 charaters"]
     },
     price:{
         type:Number,

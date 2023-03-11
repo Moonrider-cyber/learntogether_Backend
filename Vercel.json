@@ -1,15 +1,10 @@
 {
-   "version": 1,
-   "builds": [
-     {
-       "src": "/server.js",
-       "use": "@now/node"
-     }
-   ],
-   "routes": [
-     {
-       "src": "/(.*)",
-       "dest": "/server.js"
-     }
-   ]
- }
+  "version": 2,
+  "name": "vercel-deploy",
+  "builds": [
+     { "src": "server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+     { "src": "/(.*)", "dest": "/server.js" }
+  ]
+}
