@@ -34,7 +34,7 @@
 //     });
 // });
 
-const app = require('./app.js');
+const app = require('./api/index');
 
 
 const server = app.listen(8000,()=>{
