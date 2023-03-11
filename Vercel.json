@@ -2,9 +2,9 @@
   "version": 2,
   "name": "vercel-deploy",
   "builds": [
-     { "src": "server.js", "use": "@vercel/node" }
+     { "src": "./index.js", "use": "@vercel/node" }
   ],
   "routes": [
-     { "src": "/(.*)", "dest": "/server.js" }
+     { "src": "/(.*)", "dest": "/" }
   ]
 }
