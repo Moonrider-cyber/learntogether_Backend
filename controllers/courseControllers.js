@@ -138,8 +138,7 @@ exports.deleteCourse = catchAsyncError(async(req,res,next)=>{
             resource_type:"video",
         }); 
     }
-
-    await course.remove();
+    await Course.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
         success:true,

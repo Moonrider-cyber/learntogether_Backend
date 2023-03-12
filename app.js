@@ -1,40 +1,40 @@
-// const express = require("express");
-// const app = express();
-// const dotenv = require('dotenv');
-// const cookieParser = require('cookie-parser')
-// const cors = require('cors');
+const express = require("express");
+const app = express();
+const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser')
+const cors = require('cors');
 
-// const errorMiddleware = require('./middleware/error');
-
-
-// // config for env variables
-// dotenv.config({path:"config.env"});
+const errorMiddleware = require('./middleware/error');
 
 
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(cookieParser());
-// app.use(cors({
-//     origin: process.env.FRONTEND_URL,
-//     credentials: true,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     optionSuccessStatus:200,
-// }));
+// config for env variables
+dotenv.config({path:"config.env"});
 
-// // route imports
-// const courseroute = require("./routes/CourseRoute")
-// const userroute = require("./routes/UserRoute")
-// const categoryroute = require("./routes/CategoryRoute")
 
-// app.get("/", (req, res) => { 
-//     res.send(`server is working frontend in`); 
-// });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    optionSuccessStatus:200,
+}));
 
-// app.use("/api/v1",courseroute);
-// app.use("/api/v1",userroute);
-// app.use("/api/v1",categoryroute);
+// route imports
+const courseroute = require("./routes/CourseRoute")
+const userroute = require("./routes/UserRoute")
+const categoryroute = require("./routes/CategoryRoute")
 
-// // Middleware for errors
-// app.use(errorMiddleware);
+app.get("/", (req, res) => { 
+    res.send(`server is working frontend in`); 
+});
 
-// module.exports = app
+app.use("/api/v1",courseroute);
+app.use("/api/v1",userroute);
+app.use("/api/v1",categoryroute);
+
+// Middleware for errors
+app.use(errorMiddleware);
+
+module.exports = app

@@ -96,7 +96,7 @@ exports.Adminlogin = catchAsyncError (async(req,res,next)=>{
 
     const user = await User.findOne({email}).select("+password");
 
-    if(!user || user.role == 'user' || user.role == 'instuctor'){
+    if(!user || user.role == 'user' || user.role == 'instuctor' || user.active == false){
         return next(new ErrorHander("Invalid email or password",401));
     }
     const isPwdMatch = await user.comparePassword(password);
@@ -379,7 +379,7 @@ exports.deleteUser = catchAsyncError(async(req,res,next)=>{
     }
     await cloudinary.v2.uploader.destroy(user.avatar.public_id); 
 
-    await user.remove();
+    await User.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
         success:true,
