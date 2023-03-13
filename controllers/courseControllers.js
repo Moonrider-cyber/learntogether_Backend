@@ -72,7 +72,7 @@ exports.addCourseLectures = catchAsyncError(async(req,res,next)=>{
 
     const {id} = req.params;
     const {title,desc} = req.body;
-
+    
     let course = await Course.findById(id);
     if(!course){
         return next(new ErrorHander("course not found",404));
@@ -80,7 +80,6 @@ exports.addCourseLectures = catchAsyncError(async(req,res,next)=>{
 
     const file = req.file;
     const fileUri = getDataUri(file);
-
     const mycloud = await cloudinary.v2.uploader.upload(fileUri.content,{
         resource_type:"video",
     });
@@ -156,21 +155,25 @@ exports.deleteLecture= catchAsyncError(async(req,res,next)=>{
     if(!course){
         return next(new ErrorHander("course not found",404));
     }
-    
-    const lecture = course.lectures.find((item)=>{
+    const lecture = await course.lectures.find((item)=>{
         if(item._id.toString() === lectureId.toString()) return item;
     })
     await cloudinary.v2.uploader.destroy(lecture.video[0].public_id,{
         resource_type:"video",
     });
     
-    course.lectures.filter(item=>{
+    course.lectures.filter( item=>{
         if(item._id.toString() !== lectureId.toString()) return item;
     })
-    course.noOfVideos = course.lectures.length;
-    await course.save();
-    console.log(course.lectures[0].video)
+    let newcourse = await Course.updateOne(
+        {_id:courseId},
+        {$pull:{lectures:{_id:lectureId}}},
+    )
 
+    if(course) course.noOfVideos = course.lectures.length; 
+    
+    await course.save();
+    
     res.status(200).json({
         success:true,
         message:"lectures deleted successfuly"
