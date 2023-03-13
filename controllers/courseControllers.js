@@ -5,7 +5,7 @@ const ApiFeatures = require("../utils/apifeatures");
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
 
-//create course -- Teacher
+//create/add course -- Teacher
 exports.createCourse = catchAsyncError(async (req,res,next)=>{
     
     const {title,description,price,poster,catagory,createBy} = req.body;
@@ -16,6 +16,9 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
     const fileUri = getDataUri(file);
 
     const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
+    let user = await Course.findOne({ title });
+    if(user) return next(new ErrorHander("Someone already took this course title",409));
 
     const course = await Course.create({
         title,
