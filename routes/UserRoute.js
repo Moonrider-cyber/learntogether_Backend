@@ -16,7 +16,7 @@ router.route("/admin/login").post(Adminlogin);
 
 // forgot password send reset token via email
 router.route("/forgotpassword").post(forgotPassword);
-router.route("/resetpassword/:token").put( isAuthenticatedUser, resetPassword);
+router.route("/resetpassword/:token").put( resetPassword);
 router.route("/logout").post(logout);
 router.route("/admin/logout").post(Adminlogout);
 router.route("/me").post( isAuthenticatedUser, getMyProfile);

@@ -203,21 +203,22 @@ exports.updateProfilePicture = catchAsyncError(async(req,res,next)=>{
 //  forgot pwd
 exports.forgotPassword = catchAsyncError(async(req,res,next)=>{
     const user = await User.findOne({email:req.body.email});
-
+    
     if(!user){
         return next(new ErrorHander("User not found"),404);
     }
     //get ResetPassword token
     const resetToken = await user.getResetPwdToken();
-    console.log("reset token send",resetToken);
+    // console.log("reset token send",resetToken);
     await user.save({validateBeforeSave:false});
+ 
+    // const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/resetpassword/${resetToken}`;
+    const resetPasswordURL = `${process.env.FRONTEND_URL}/api/v1/resetpassword/${resetToken}`;
 
-    const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/resetpassword/${resetToken}`;
-
-    let message = `Your password reset token in:- \n\n ${resetPasswordURL} \n\n If you have not requested this email then please ignore it 🤣`;
+    let message = `Your password reset token in:- \n\n ${resetPasswordURL} \n\n If you have not requested this email then please ignore it`;
 
     try {
-        message = `Your password reset token in:- \n\n ${resetPasswordURL} \n\n If you have not requested this email then please ignore it 🤣`;
+        message = `Your password reset token in:- \n\n ${resetPasswordURL} \n\n If you have not requested this email then please ignore it`;
         await sendEmail({
             email:user.email,
             subject:"Busilearn Password recovery",
