@@ -6,6 +6,7 @@ const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail.js');
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
+const crypto = require('crypto');
 
 // register user
 exports.registerUser = catchAsyncError( async(req,res,next)=>{
@@ -213,12 +214,16 @@ exports.forgotPassword = catchAsyncError(async(req,res,next)=>{
     await user.save({validateBeforeSave:false});
  
     // const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/resetpassword/${resetToken}`;
-    const resetPasswordURL = `${process.env.FRONTEND_URL}/api/v1/resetpassword/${resetToken}`;
-
+    let resetPasswordURL = ``;
+    if(req.body.user == true){
+        resetPasswordURL = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+    }else{
+        resetPasswordURL = `${process.env.FRONTEND_URL}/admin/resetpassword/${resetToken}`;
+    }
     let message = `Your password reset token in:- \n\n ${resetPasswordURL} \n\n If you have not requested this email then please ignore it`;
 
     try {
-        message = `Your password reset token in:- \n\n ${resetPasswordURL} \n\n If you have not requested this email then please ignore it`;
+        message 
         await sendEmail({
             email:user.email,
             subject:"Busilearn Password recovery",
@@ -246,9 +251,9 @@ exports.resetPassword = catchAsyncError(async(req,res,next)=>{
     if(!token){
         return next(new ErrorHander("token not found",404));
     }
-    // console.log("req....",req.params.token);
+    // console.log("req....",token);
 
-    // const resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
+    const resetPasswordToken = crypto.createHmac("sha256",process.env.JWT_SECRET).update(token).digest("hex");
     
     // console.log("resettoken... after decrpt",resetPasswordToken);
 
@@ -263,7 +268,7 @@ exports.resetPassword = catchAsyncError(async(req,res,next)=>{
         return next(new ErrorHander("reset token invalid or has been expired",404));
     }
 
-    user.password = req.body.password;
+    user.password = req.body.pwd;
     user.resetPasswordExpire = undefined;
     user.resetPasswordToken = undefined;
 

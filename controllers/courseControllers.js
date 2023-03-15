@@ -17,8 +17,8 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
 
     const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
 
-    let user = await Course.findOne({ title });
-    if(user) return next(new ErrorHander("Someone already took this course title",409));
+    let coursedata = await Course.findOne({ title });
+    if(coursedata) return next(new ErrorHander("Someone already took this course title",409));
 
     const course = await Course.create({
         title,

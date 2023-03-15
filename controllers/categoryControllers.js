@@ -7,6 +7,9 @@ exports.createCategory = catchAsyncError(async (req,res,next)=>{
     
     const {name,description,createBy} = req.body;
 
+    let categorydata = await Category.findOne({ name });
+    if(categorydata) return next(new ErrorHander("Someone already took this course title",409));
+
 
     const category = await Category.create({
         name,
