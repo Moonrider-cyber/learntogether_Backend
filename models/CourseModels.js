@@ -66,10 +66,10 @@ const courseSchema = new mongoose.Schema({
         type:Boolean,
         default:true,
     },
-    // rating:{
-    //     type:Number,
-    //     default:0
-    // },
+    rating:{
+        type:Number,
+        default:0
+    },
     numOfReviews:{
         type:Number,
         default:0
