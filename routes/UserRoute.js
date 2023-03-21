@@ -3,6 +3,7 @@ const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updatePro
 const { isAuthenticatedUser, autorizeRoles, isAuthenticatedAdmin } = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
+const { Instructorlogin } = require('../controllers/instructorControllers');
 
 
 //multer file upload and get file details
@@ -37,5 +38,8 @@ router.route("/admin/users/:id")
     .put(isAuthenticatedAdmin,updateUserRole)
     .delete(deleteUser)
 
+// instructor
+router.route("/instructor/login").post(Instructorlogin);
 
+    
 module.exports = router; 
