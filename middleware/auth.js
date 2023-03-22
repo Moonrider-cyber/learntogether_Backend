@@ -32,7 +32,21 @@ exports.isAuthenticatedAdmin = catchAsyncError(async(req,res,next)=>{
 
     next();
 });
+exports.isAuthenticatedInstructor = catchAsyncError(async(req,res,next)=>{
+    const { instructortoken } = req.cookies;
+    
+    if(!instructortoken){
+        return res.status(401).json({
+            success:false,
+        })
+    }
 
+    const decodeData = jwt.verify(instructortoken,process.env.JWT_SECRET);
+
+    req.user = await User.findById(decodeData.id);
+
+    next();
+});
 exports.autorizeRoles = (...roles)=>{
     return (req,res,next)=>{
         if(!roles.includes(req.user.role)){

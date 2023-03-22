@@ -12,6 +12,7 @@ const crypto = require('crypto');
 exports.registerUser = catchAsyncError( async(req,res,next)=>{
 
     const {name,email,password} = req.body;
+    console.log(name,email,password)
     const file = req.file;
 
     if(!name || !email || !password || !file) return next(new ErrorHander("Please enter all field",400));

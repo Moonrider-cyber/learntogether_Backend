@@ -2,8 +2,37 @@ const ErrorHander = require('../utils/errorHander');
 const catchAsyncError = require('../middleware/catchAsyncError');
 const User = require('../models/UserModel');
 const sendToken = require('../utils/jwtToken');
+const cloudinary = require('cloudinary');
+const getDataUri = require("../utils/datauri");
+const crypto = require('crypto');
 
-//admin login user
+// register user
+exports.registerInstructor = catchAsyncError( async(req,res,next)=>{
+
+    const {name,email,password} = req.body;
+    const file = req.file;
+
+    if(!name || !email || !password || !file) return next(new ErrorHander("Please enter all field",400));
+    let user = await User.findOne({ email });
+    if(user) return next(new ErrorHander("User Already Exist",409));
+
+    const fileUri = getDataUri(file);
+    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
+    const role = "instructor";
+    
+    user = await User.create({
+        name,email,password,role,
+        avatar:{
+            public_id:mycloud.public_id,
+            url:mycloud.secure_url,
+        }
+    });
+
+    const token = user.getJWTToken();
+
+    sendToken(user,201,res,"Signup Successfully","instructortoken");
+} );
+//instructor login user
 exports.Instructorlogin = catchAsyncError (async(req,res,next)=>{
     const {email,password} = req.body
 
@@ -18,11 +47,9 @@ exports.Instructorlogin = catchAsyncError (async(req,res,next)=>{
         return next(new ErrorHander("Invalid email or password",401));
     }
     const isPwdMatch = await user.comparePassword(password);
-    
     if(!isPwdMatch){
         return next(new ErrorHander("Invalid email or password",401));
     }
     
-    sendToken(user,200,res,"Login Successfully","instructortoken");
-    
+    sendToken(user,200,res,"Login Successfully","instructortoken"); 
 });
