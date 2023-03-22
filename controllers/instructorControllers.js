@@ -53,3 +53,15 @@ exports.Instructorlogin = catchAsyncError (async(req,res,next)=>{
     
     sendToken(user,200,res,"Login Successfully","instructortoken"); 
 });
+//Instructor logout user
+exports.Instructorlogout = catchAsyncError(async(req,res,next)=>{
+
+    res.cookie("instructortoken", null ,{
+        expires: new Date(Date.now()),
+        httpOnly:true
+    })
+    res.status(200).json({
+        success:true,
+        message:"logged out successfully"
+    })
+})

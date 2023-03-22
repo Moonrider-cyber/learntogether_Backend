@@ -3,7 +3,7 @@ const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updatePro
 const { isAuthenticatedUser, autorizeRoles, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
-const { Instructorlogin, registerInstructor } = require('../controllers/instructorControllers');
+const { Instructorlogin, registerInstructor, Instructorlogout } = require('../controllers/instructorControllers');
 
 
 //multer file upload and get file details
@@ -42,5 +42,6 @@ router.route("/admin/users/:id")
 router.route("/instructor/login").post(Instructorlogin);
 router.route("/instructor/register").post(singleUpload,registerInstructor);
 router.route("/instructor/me").post( isAuthenticatedInstructor,autorizeRoles("instructor"), getMyProfile);
-    
+router.route("/instructor/logout").post(Instructorlogout);
+
 module.exports = router; 
