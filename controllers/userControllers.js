@@ -298,8 +298,9 @@ exports.getMyProfile = catchAsyncError(async(req,res,next)=>{
  
 // add to cart
 exports.addToCart = catchAsyncError(async(req,res,next)=>{
+    
     const user = await User.findById(req.user.id);
-    const course = await Course.findById(req.body.id);
+    const course = await Course.findById(req.body.courseid);
 
     if(!course){
         return next(new ErrorHander("course not found"),404);
@@ -323,11 +324,16 @@ exports.addToCart = catchAsyncError(async(req,res,next)=>{
         message:"added to cart"
     })
 })
+// get course that are in cart
+// exports.getCartItmes = catchAsyncError(async(req,res,next)=>{
+//     const user = await User.findById(req.user.id);
+//     const course = await Course.findById(req.body.courseid);
+// })
 
 // remove to cart
 exports.removeFromCart = catchAsyncError(async(req,res,next)=>{
     const user = await User.findById(req.user.id);
-    const course = await Course.findById(req.body.id);
+    const course = await Course.findById(req.body.courseid);
 
     if(!course){
         return next(new ErrorHander("course not found"),404);
