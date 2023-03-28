@@ -310,7 +310,7 @@ exports.addToCart = catchAsyncError(async(req,res,next)=>{
         if(item.course.toString()=== course.id.toString()) return true
     })
 
-    if(itemExist) return next(new ErrorHander("Item already exist"),409);
+    if(itemExist) return next(new ErrorHander("Course already in cart"),409);
 
     user.cart.push({
         course:course.id,
@@ -325,16 +325,21 @@ exports.addToCart = catchAsyncError(async(req,res,next)=>{
     })
 })
 // get course that are in cart
-// exports.getCartItmes = catchAsyncError(async(req,res,next)=>{
-//     const user = await User.findById(req.user.id);
-//     const course = await Course.findById(req.body.courseid);
-// })
+exports.getCartCourse = catchAsyncError(async(req,res,next)=>{
+    const user = await User.findById(req.user.id);
+    
+    const cartcourses = await Course.find({_id:{$in:user.cart.map(item=>item.course)}});
+    
+    res.status(200).json({
+        success:true,
+        cartcourses
+    })
+})
 
 // remove to cart
 exports.removeFromCart = catchAsyncError(async(req,res,next)=>{
     const user = await User.findById(req.user.id);
     const course = await Course.findById(req.body.courseid);
-
     if(!course){
         return next(new ErrorHander("course not found"),404);
     }

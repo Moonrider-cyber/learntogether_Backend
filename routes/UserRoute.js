@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser } = require('../controllers/userControllers');
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse } = require('../controllers/userControllers');
 const { isAuthenticatedUser, autorizeRoles, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
@@ -30,6 +30,7 @@ router.route("/changepassword").put( isAuthenticatedUser, changePassword);
 router.route("/updateprofile").put( isAuthenticatedUser, updateProfile);
 router.route("/updateprofilepicture").put(singleUpload, isAuthenticatedUser, updateProfilePicture);
 router.route("/addtocart").post( isAuthenticatedUser, addToCart);
+router.route("/getcartcourses").post( isAuthenticatedUser, getCartCourse);
 router.route("/removefromcart").delete( isAuthenticatedUser, removeFromCart);
 
 //get all user data -admin``
