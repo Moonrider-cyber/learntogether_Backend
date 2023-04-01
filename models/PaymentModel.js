@@ -1,20 +1,24 @@
 const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema({
-    
-    user:[
-        {
-            userid:{
-                type:mongoose.Schema.ObjectId,
-                ref:"User",
-                required:true
-            },
-            username:{
-                type:String,
-                required:true
-            },
-        }
-    ],
+
+    paymentID:{
+        type:String,
+        required:true
+    },
+    paymentStatus:{
+        type:String,
+        required:true
+    },
+    paidAmount:{
+        type:Number,
+        required:true
+    },
+    userID:{   
+        type:mongoose.Schema.ObjectId,
+        ref:"User",
+        required:true  
+    },
     course:[
         {
             courseid:{
