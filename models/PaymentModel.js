@@ -6,10 +6,6 @@ const paymentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    paymentStatus:{
-        type:String,
-        required:true
-    },
     paidAmount:{
         type:Number,
         required:true
@@ -19,19 +15,11 @@ const paymentSchema = new mongoose.Schema({
         ref:"User",
         required:true  
     },
-    course:[
+    courses:[
         {
             courseid:{
                 type:mongoose.Schema.ObjectId,
-                ref:"User",
-                required:true
-            },
-            coursename:{
-                type:String,
-                required:true
-            },
-            courseprice:{
-                type:Number,
+                ref:"Course",
                 required:true
             },
         }

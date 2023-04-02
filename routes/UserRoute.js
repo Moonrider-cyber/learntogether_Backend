@@ -1,9 +1,10 @@
 const express = require('express');
 const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse } = require('../controllers/userControllers');
-const { isAuthenticatedUser, autorizeRoles, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/auth');
+const { isAuthenticatedUser, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
 const router = express.Router();
 const multer = require('multer');
 const { Instructorlogin, registerInstructor, Instructorlogout } = require('../controllers/instructorControllers');
+const { completePayment } = require('../controllers/paymentControllers');
 
 
 //multer file upload and get file details
@@ -24,6 +25,9 @@ router.route("/me").post( isAuthenticatedUser, getMyProfile);
 router.route("/admin/me").post( isAuthenticatedAdmin, getMyProfile);
 router.route("/admin/controluser/:id").post( isAuthenticatedAdmin, activeDeactiveUser);
 
+// Payment
+router.route("/payment").post( isAuthenticatedUser, completePayment);
+
 
 // change password from profile
 router.route("/changepassword").put( isAuthenticatedUser, changePassword);
@@ -42,7 +46,7 @@ router.route("/admin/users/:id")
 // instructor
 router.route("/instructor/login").post(Instructorlogin);
 router.route("/instructor/register").post(singleUpload,registerInstructor);
-router.route("/instructor/me").post( isAuthenticatedInstructor,autorizeRoles("instructor"), getMyProfile);
+router.route("/instructor/me").post( isAuthenticatedInstructor, getMyProfile);
 router.route("/instructor/logout").post(Instructorlogout);
 
 module.exports = router; 

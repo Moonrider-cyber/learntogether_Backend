@@ -33,9 +33,6 @@ app.get("/", (req, res) => {
 app.use("/api/v1",courseroute);
 app.use("/api/v1",userroute);
 app.use("/api/v1",categoryroute);
-app.get("/api/v1/config/paypal",(req,res)=>{
-    res.send(process.env.PAYPAL_CLIENT_ID);
-});
 
 // Middleware for errors
 app.use(errorMiddleware);
