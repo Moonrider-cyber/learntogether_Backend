@@ -1,10 +1,10 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse } = require('../controllers/userControllers');
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse, checkEnroll } = require('../controllers/userControllers');
 const { isAuthenticatedUser, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
 const router = express.Router();
 const multer = require('multer');
 const { Instructorlogin, registerInstructor, Instructorlogout } = require('../controllers/instructorControllers');
-const { completePayment } = require('../controllers/paymentControllers');
+const { completePayment, getAllPayments } = require('../controllers/paymentControllers');
 
 
 //multer file upload and get file details
@@ -20,10 +20,9 @@ router.route("/admin/login").post(Adminlogin);
 router.route("/forgotpassword").post(forgotPassword);
 router.route("/resetpassword/:token").put( resetPassword);
 router.route("/logout").post(logout);
-router.route("/admin/logout").post(Adminlogout);
 router.route("/me").post( isAuthenticatedUser, getMyProfile);
-router.route("/admin/me").post( isAuthenticatedAdmin, getMyProfile);
-router.route("/admin/controluser/:id").post( isAuthenticatedAdmin, activeDeactiveUser);
+router.route("/checkenroll").post( isAuthenticatedUser, checkEnroll);
+
 
 // Payment
 router.route("/payment").post( isAuthenticatedUser, completePayment);
@@ -39,6 +38,11 @@ router.route("/removefromcart").delete( isAuthenticatedUser, removeFromCart);
 
 //get all user data -admin``
 router.route("/admin/users").post(isAuthenticatedAdmin,getAllUsers);
+router.route("/admin/me").post( isAuthenticatedAdmin, getMyProfile);
+router.route("/admin/payments").post(isAuthenticatedAdmin,getAllPayments);
+router.route("/admin/logout").post(Adminlogout);
+router.route("/admin/me").post( isAuthenticatedAdmin, getMyProfile);
+router.route("/admin/controluser/:id").post( isAuthenticatedAdmin, activeDeactiveUser);
 router.route("/admin/users/:id")
     .put(isAuthenticatedAdmin,updateUserRole)
     .delete(deleteUser)

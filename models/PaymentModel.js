@@ -10,11 +10,19 @@ const paymentSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
-    userID:{   
-        type:mongoose.Schema.ObjectId,
-        ref:"User",
-        required:true  
-    },
+    user:[
+         {   
+            userID:{
+                type:mongoose.Schema.ObjectId,
+                ref:"user",
+                required:true
+            },
+            username:{
+                type:String,
+                required:true
+            }  
+        }
+    ],
     courses:[
         {
             courseid:{

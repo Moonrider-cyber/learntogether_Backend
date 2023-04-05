@@ -2,6 +2,7 @@ const ErrorHander = require('../utils/errorHander');
 const catchAsyncError = require('../middleware/catchAsyncError');
 const User = require('../models/UserModel');
 const Course = require('../models/courseModels');
+const Payment = require('../models/PaymentModel');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail.js');
 const cloudinary = require('cloudinary');
@@ -421,3 +422,25 @@ exports.activeDeactiveUser = catchAsyncError(async(req,res,next)=>{
         message:"user behavior change successfully"
     })
 });
+
+// check user already enroll or not
+exports.checkEnroll = catchAsyncError(async(req,res,next)=>{
+    let userid = await User.findById(req.user.id);
+    let courseid = await req.body.courseid;
+    if(!userid){
+        return next(new ErrorHander("user not found",404));
+    }
+    
+    const isEnroll = await Payment.findOne({
+        user: { $elemMatch: { userID: userid, username: { $exists: true } } },
+        courses: { $elemMatch: { courseid: courseid } }
+      });
+
+    if(!isEnroll){
+        res.status(200).json({
+            success:true
+        })
+    }
+    
+    next();
+})
