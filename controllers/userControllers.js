@@ -13,7 +13,7 @@ const crypto = require('crypto');
 exports.registerUser = catchAsyncError( async(req,res,next)=>{
 
     const {name,email,password} = req.body;
-    console.log(name,email,password)
+    
     const file = req.file;
 
     if(!name || !email || !password || !file) return next(new ErrorHander("Please enter all field",400));
@@ -435,12 +435,38 @@ exports.checkEnroll = catchAsyncError(async(req,res,next)=>{
         user: { $elemMatch: { userID: userid, username: { $exists: true } } },
         courses: { $elemMatch: { courseid: courseid } }
       });
-
+      
     if(!isEnroll){
         res.status(200).json({
-            success:true
+            success:false,
+            isEnroll : false
+        })
+    }else{
+        res.status(200).json({
+            success:true,
+            isEnroll : true
         })
     }
-    
     next();
+})
+
+// get all enroll course
+exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
+    let userid = await User.findById(req.user.id);
+    if(!userid){
+        return next(new ErrorHander("user not found",404));
+    }
+    const payments = await Payment.find({'user.userID': userid}).populate('courses.courseid');
+
+    const courses = [];
+    payments.forEach(payment => {
+      payment.courses.forEach(course => {
+        courses.push(course.courseid);
+      });
+    });
+    
+    res.status(200).json({
+        success:true,
+        enrollcourses : courses 
+    })
 })

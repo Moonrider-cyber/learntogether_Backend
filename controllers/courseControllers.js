@@ -30,6 +30,7 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
             public_id:mycloud.public_id,
             url:mycloud.secure_url,
         },
+        active:false,
     });
 
     res.status(201).json({
@@ -43,10 +44,25 @@ exports.getAllCourse = catchAsyncError(async(req,res) =>{
     
     const resultPerPage = 5;
     const productCount = await Course.countDocuments();
-
+    
     const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter().pagination(resultPerPage);
 
     const courses = await apiFeatures.query;
+
+    res.status(200).json({
+        success:true,
+        courses,
+        productCount,
+    })
+});
+// get all course admin
+exports.getAllCourseadmin = catchAsyncError(async(req,res) =>{
+    
+    const resultPerPage = 5;
+    const productCount = await Course.countDocuments();
+    
+    const courses = await Course.find();
+
     res.status(200).json({
         success:true,
         courses,

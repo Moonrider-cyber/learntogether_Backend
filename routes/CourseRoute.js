@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture, activeDeactiveCourse } = require('../controllers/coursecontrollers');
+const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture, activeDeactiveCourse, getAllCourseadmin } = require('../controllers/courseControllers');
 const { autorizeRoles, isAuthenticatedAdmin } = require('../middleware/Auth');
 const router = express.Router();
 // const  { singleupload }  = require('../middleware/multer.js');
@@ -11,6 +11,9 @@ const singleUpload = multer({storage:multer.memoryStorage()}).single("file");
 
 router.route("/course")
     .get(getAllCourse);
+
+router.route("/admin/course")
+    .get(getAllCourseadmin);
 
 router.route("/course/new")
     // .post(singleUpload,isAuthenticatedAdmin,autorizeRoles("admin"),createCourse);

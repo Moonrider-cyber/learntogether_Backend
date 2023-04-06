@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse, checkEnroll } = require('../controllers/userControllers');
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse, checkEnroll, getEnrollCourse } = require('../controllers/userControllers');
 const { isAuthenticatedUser, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
 const router = express.Router();
 const multer = require('multer');
@@ -22,6 +22,7 @@ router.route("/resetpassword/:token").put( resetPassword);
 router.route("/logout").post(logout);
 router.route("/me").post( isAuthenticatedUser, getMyProfile);
 router.route("/checkenroll").post( isAuthenticatedUser, checkEnroll);
+router.route("/enrollcourse").post( isAuthenticatedUser, getEnrollCourse);
 
 
 // Payment
