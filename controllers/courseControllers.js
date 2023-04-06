@@ -55,6 +55,19 @@ exports.getAllCourse = catchAsyncError(async(req,res) =>{
         productCount,
     })
 });
+// get all course
+exports.getAllCourseins = catchAsyncError(async(req,res) =>{
+    
+    const userid = req.user.id;
+    
+    const courses = await Course.find({ "createBy.creatorid": userid });
+    
+    res.status(200).json({
+        success:true,
+        courses,
+        
+    })
+});
 // get all course admin
 exports.getAllCourseadmin = catchAsyncError(async(req,res) =>{
     
@@ -70,7 +83,7 @@ exports.getAllCourseadmin = catchAsyncError(async(req,res) =>{
     })
 });
 
-// get single course 
+// get single course lecture 
 exports.getCourseLectures = catchAsyncError(async(req,res,next)=>{
     let course = await Course.findById(req.params.id);
 
@@ -109,8 +122,9 @@ exports.addCourseLectures = catchAsyncError(async(req,res,next)=>{
         video:{
             public_id: mycloud.public_id,
             url: mycloud.secure_url,
-        }
+        },
     });
+    course.active = true;
 
     course.noOfVideos = course.lectures.length;
     await course.save();

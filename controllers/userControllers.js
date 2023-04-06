@@ -458,15 +458,26 @@ exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
     }
     const payments = await Payment.find({'user.userID': userid}).populate('courses.courseid');
 
+   
     const courses = [];
     payments.forEach(payment => {
       payment.courses.forEach(course => {
         courses.push(course.courseid);
       });
     });
+
+    const filtercourses = courses.map((item, index) =>
+    {
+        if(item.active == true){
+            return item
+        }
+        else{
+            return false
+        }
+    }) 
     
     res.status(200).json({
         success:true,
-        enrollcourses : courses 
+        enrollcourses : filtercourses 
     })
 })
