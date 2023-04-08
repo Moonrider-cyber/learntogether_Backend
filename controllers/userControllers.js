@@ -453,6 +453,7 @@ exports.checkEnroll = catchAsyncError(async(req,res,next)=>{
 // get all enroll course
 exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
     let userid = await User.findById(req.user.id);
+    
     if(!userid){
         return next(new ErrorHander("user not found",404));
     }
@@ -481,3 +482,67 @@ exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
         enrollcourses : filtercourses 
     })
 })
+
+// get instructor payments
+exports.getInstructorPayments = catchAsyncError(async(req,res,next)=>{
+    let userid = await User.findById(req.user.id);
+    if(!userid){
+        return next(new ErrorHander("user not found",404));
+    }
+    const payments = await Payment.find().populate('courses.courseid');
+
+    const courses = [];
+    payments.forEach(payment => {
+        payment.courses.forEach(course => {
+            courses.push(course.courseid);
+        }); 
+    });
+    const filtercourses = courses.map((item, index) =>
+    {
+        if(item.instructor == userid.id){
+            return item
+        }
+    })
+// TODO
+    res.status(200).json({
+        success:true,
+        payments : courses 
+    })
+
+});
+
+// create review
+exports.createReview = catchAsyncError(async(req,res,next)=>{
+    const {rating,comment,courseid} = req.body;
+    const {id} = req.user;
+
+    if(!rating || !comment || !courseid){
+        return next(new ErrorHander("please provide rating and comment",400));
+    }
+
+    const course = await Course.findById(courseid.courseid);
+
+    if(!course){
+        return next(new ErrorHander("course not found",404));
+    }
+    
+    console.log(course.reviews)
+    if(course.reviews.find(review=>review.userid.toString()===id.toString())){
+        return next(new ErrorHander("you already review this course",400));
+    }
+    
+    course.reviews.push({
+        userid:id,
+        name:req.user.name,
+        rating:Number(rating),
+        comment
+    })
+    course.numOfReviews = course.numOfReviews + 1; 
+
+    await course.save();
+
+    res.status(200).json({
+        success:true,
+        message:"review created"
+    })
+});

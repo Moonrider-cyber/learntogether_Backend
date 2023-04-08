@@ -76,6 +76,11 @@ const courseSchema = new mongoose.Schema({
     },
     reviews:[
         {
+            userid:{
+                type:mongoose.Schema.ObjectId,
+                ref:"User",
+                required:true
+            },
             name:{
                 type:String,
                 required:true        
@@ -84,7 +89,7 @@ const courseSchema = new mongoose.Schema({
                 type:String,
                 required:true        
             },
-            Comment:{
+            comment:{
                 type:String,
                 required:true        
             }

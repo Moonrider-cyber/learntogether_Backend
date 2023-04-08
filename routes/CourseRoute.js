@@ -1,6 +1,6 @@
 const express = require('express');
-const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture, activeDeactiveCourse, getAllCourseadmin, getAllCourseins } = require('../controllers/courseControllers');
-const { autorizeRoles, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
+const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture, activeDeactiveCourse, getAllCourseadmin, getAllCourseins, getAllReviews } = require('../controllers/courseControllers');
+const { autorizeRoles, isAuthenticatedAdmin, isAuthenticatedInstructor, isAuthenticatedUser } = require('../middleware/Auth');
 const router = express.Router();
 // const  { singleupload }  = require('../middleware/multer.js');
 
@@ -27,6 +27,9 @@ router.route("/course/:id")
     .delete(deleteCourse)
     .get(getCourseLectures)
     .post(singleUpload,addCourseLectures);
+
+router.route("/course/reviews/:courseid")
+    .get(isAuthenticatedUser,getAllReviews);
 
 router.route("/lecture")
     .delete(deleteLecture);

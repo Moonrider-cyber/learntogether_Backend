@@ -4,6 +4,7 @@ const catchAsyncError = require('../middleware/catchAsyncError');
 const ApiFeatures = require("../utils/apifeatures");
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
+const User = require("../models/UserModel");
 
 //create/add course -- Teacher
 exports.createCourse = catchAsyncError(async (req,res,next)=>{
@@ -227,5 +228,30 @@ exports.activeDeactiveCourse = catchAsyncError(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         message:"course behavior change successfully"
+    })
+});
+
+// get all reviews
+exports.getAllReviews = catchAsyncError(async(req,res,next)=>{
+    
+    const courseid = await req.params.courseid;
+    const user = await User.findById(req.user.id);
+
+    if(!courseid){
+        return next(new ErrorHander("course not found",404));
+    }
+    const course = await Course.find({ _id: courseid });
+    const reviews = course[0].reviews;
+    
+    reviews.map((item)=>{
+        if(item.userid.toString() === user._id.toString()){
+            item.isOwner = true;
+        }
+    })
+
+
+    res.status(200).json({
+        success:true,
+        reviews
     })
 });
