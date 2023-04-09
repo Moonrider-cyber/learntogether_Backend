@@ -235,19 +235,13 @@ exports.activeDeactiveCourse = catchAsyncError(async(req,res,next)=>{
 exports.getAllReviews = catchAsyncError(async(req,res,next)=>{
     
     const courseid = await req.params.courseid;
-    const user = await User.findById(req.user.id);
-
+    // const user = await User.findById(req.user.id);
+    
     if(!courseid){
         return next(new ErrorHander("course not found",404));
     }
     const course = await Course.find({ _id: courseid });
     const reviews = course[0].reviews;
-    
-    reviews.map((item)=>{
-        if(item.userid.toString() === user._id.toString()){
-            item.isOwner = true;
-        }
-    })
 
 
     res.status(200).json({

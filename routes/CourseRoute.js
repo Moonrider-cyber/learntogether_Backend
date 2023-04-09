@@ -29,7 +29,8 @@ router.route("/course/:id")
     .post(singleUpload,addCourseLectures);
 
 router.route("/course/reviews/:courseid")
-    .get(isAuthenticatedUser,getAllReviews);
+    .get(getAllReviews);
+    // .get(isAuthenticatedUser,getAllReviews);
 
 router.route("/lecture")
     .delete(deleteLecture);

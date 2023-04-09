@@ -485,28 +485,52 @@ exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
 
 // get instructor payments
 exports.getInstructorPayments = catchAsyncError(async(req,res,next)=>{
-    let userid = await User.findById(req.user.id);
-    if(!userid){
+    
+    let user = await User.findById(req.user.id);
+
+    if(!user){
         return next(new ErrorHander("user not found",404));
     }
-    const payments = await Payment.find().populate('courses.courseid');
+    const mycourse = await Course.find({'createBy.creatorid':user._id});
+    const payments = await Payment.find({'courses.courseid':{$in:mycourse.map(item=>item._id)}}).populate('courses.courseid');
+    
 
-    const courses = [];
-    payments.forEach(payment => {
-        payment.courses.forEach(course => {
-            courses.push(course.courseid);
-        }); 
-    });
-    const filtercourses = courses.map((item, index) =>
-    {
-        if(item.instructor == userid.id){
-            return item
-        }
-    })
-// TODO
+    // const allcoursesid = [];
+    // payments.forEach(payment => {
+    //     payment.courses.forEach(course => {
+    //         allcoursesid.push(course.courseid);
+    //     }); 
+    // });
+
+    // let paymentcoursesPromise = await Promise.all(
+    //     allcoursesid.map((item, index) => {
+    //       return Course.findById(item);
+    //     })
+    //   )
+    //   .then(courses => {
+    //     return courses;
+    //   });
+
+    //   let mycourse = await Promise.all(
+    //     paymentcoursesPromise.map((item, index) => {
+        
+    //         let createby = item.createBy[0].creatorid;
+    //         let userid = user._id;
+
+    //         if((createby).equals(userid)){
+    //             return item
+    //         };
+    //     })  
+    //   )
+        
+    //   mycourse = mycourse.filter(function(element) {
+    //     return typeof element !== 'undefined';
+    //   });
+      
+      
     res.status(200).json({
         success:true,
-        payments : courses 
+        mypayments : payments 
     })
 
 });
@@ -525,20 +549,28 @@ exports.createReview = catchAsyncError(async(req,res,next)=>{
     if(!course){
         return next(new ErrorHander("course not found",404));
     }
-    
-    console.log(course.reviews)
+
     if(course.reviews.find(review=>review.userid.toString()===id.toString())){
         return next(new ErrorHander("you already review this course",400));
     }
     
     course.reviews.push({
-        userid:id,
+        userid:id,  
         name:req.user.name,
         rating:Number(rating),
         comment
     })
-    course.numOfReviews = course.numOfReviews + 1; 
 
+    course.numOfReviews = course.numOfReviews + 1;
+
+    let totalRating = 0;
+    let Ratinglenght = 0;
+    
+    course.reviews.forEach((review,key)=>{
+        totalRating += Number(review.rating);
+        Ratinglenght += 1;
+    })
+    
     await course.save();
 
     res.status(200).json({
