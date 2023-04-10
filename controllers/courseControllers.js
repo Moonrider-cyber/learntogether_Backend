@@ -43,10 +43,9 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
 // get all course
 exports.getAllCourse = catchAsyncError(async(req,res) =>{
     
-    const resultPerPage = 5;
     const productCount = await Course.countDocuments();
     
-    const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter().pagination(resultPerPage);
+    const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter()
 
     const courses = await apiFeatures.query;
 
