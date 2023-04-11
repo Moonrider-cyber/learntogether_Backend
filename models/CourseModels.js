@@ -66,6 +66,10 @@ const courseSchema = new mongoose.Schema({
         type:Boolean,
         default:true,
     },
+    totalpurchase:{
+        type:Number,
+        default:0,
+    },
     rating:{
         type:Number,
         default:0

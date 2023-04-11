@@ -359,7 +359,7 @@ exports.removeFromCart = catchAsyncError(async(req,res,next)=>{
 // get all user information -admin 
 exports.getAllUsers = catchAsyncError(async(req,res,next)=>{
 
-    let users = await User.find();
+    let users = await User.find().sort({createAt: -1});
     if(!users){
         return next(new ErrorHander("somting went wrong",404));
     }
@@ -458,8 +458,9 @@ exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
         return next(new ErrorHander("user not found",404));
     }
     const payments = await Payment.find({'user.userID': userid}).populate('courses.courseid');
-
-   
+    if(!payments){
+        return next(new ErrorHander("courses not found",404));
+    }
     const courses = [];
     payments.forEach(payment => {
       payment.courses.forEach(course => {
@@ -469,6 +470,9 @@ exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
 
     const filtercourses = courses.map((item, index) =>
     {
+        if(item === null){
+            return false
+        }
         if(item.active == true){
             return item
         }

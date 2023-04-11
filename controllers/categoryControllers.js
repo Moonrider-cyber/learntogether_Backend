@@ -28,7 +28,7 @@ exports.getAllCategory = catchAsyncError(async(req,res) =>{
     
     const categoryCount = await Category.countDocuments();
 
-    let category = await Category.find();
+    let category = await Category.find().sort({createAt: -1});
     
     if(!category){
         return next(new ErrorHander("somting went wrong",404));

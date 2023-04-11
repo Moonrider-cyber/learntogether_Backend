@@ -10,17 +10,15 @@ const User = require("../models/UserModel");
 exports.createCourse = catchAsyncError(async (req,res,next)=>{
     
     const {title,description,price,poster,catagory,createBy} = req.body;
-
-    // req.body.user = req.user.id
-    
     const file = req.file;
-    const fileUri = getDataUri(file);
 
-    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
-
-    let coursedata = await Course.findOne({ title });
+    if(price < 10) return next(new ErrorHander("Price can't be negative or less then 10",409));
+    
+    let coursedata = await Course.findOne({ title: { $regex: title, $options: "i" } });
     if(coursedata) return next(new ErrorHander("Someone already took this course title",409));
-
+    
+    const fileUri = getDataUri(file);
+    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
     const course = await Course.create({
         title,
         description,
