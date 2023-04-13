@@ -544,12 +544,12 @@ exports.createReview = catchAsyncError(async(req,res,next)=>{
     const {rating,comment,courseid} = req.body;
     const {id} = req.user;
 
+    
     if(!rating || !comment || !courseid){
         return next(new ErrorHander("please provide rating and comment",400));
     }
-
-    const course = await Course.findById(courseid.courseid);
-
+    const course = await Course.findById(courseid.id);
+    
     if(!course){
         return next(new ErrorHander("course not found",404));
     }
@@ -565,20 +565,74 @@ exports.createReview = catchAsyncError(async(req,res,next)=>{
         comment
     })
 
-    course.numOfReviews = course.numOfReviews + 1;
-
-    let totalRating = 0;
-    let Ratinglenght = 0;
     
+    course.numOfReviews = course.numOfReviews + 1;
+    let totalRating = 0;
+  
     course.reviews.forEach((review,key)=>{
         totalRating += Number(review.rating);
-        Ratinglenght += 1;
     })
+    
+    course.rating = totalRating / course.numOfReviews;
     
     await course.save();
 
     res.status(200).json({
         success:true,
         message:"review created"
+    })
+});
+// delete review
+exports.deleteReview = catchAsyncError(async(req,res,next)=>{
+    const {courseid,reviewid} = req.query;
+
+    if(!courseid || !reviewid){
+        return next(new ErrorHander("please provide courseid and reviewid",400));
+    }
+    const course = await Course.findById(courseid);
+    
+    if(!course){
+        return next(new ErrorHander("course not found",404));
+    }
+    
+    let newcoursesreviews = course.reviews.filter(review=>review._id.toString()!==reviewid.toString());
+    course.reviews = newcoursesreviews;
+
+    course.numOfReviews = course.numOfReviews - 1;
+    
+    let newtotalrate = 0;
+
+    if(newcoursesreviews.length === 0){
+        course.rating = 0;
+    }else{
+        newcoursesreviews.forEach((review,key)=>{        
+           newtotalrate += Number(review.rating);
+        })
+        course.rating = newtotalrate / course.numOfReviews;
+    }
+    
+    await course.save();
+
+    res.status(200).json({
+        success:true,
+        message:"review deleted"
+    })
+});
+
+
+// get dashboard stats
+exports.getDashboardStats = catchAsyncError(async(req,res,next)=>{
+    
+    let totalpurchase = await Course.find().sort({totalpurchase: -1});
+    
+    // get all months purchases with its month name
+    
+    
+
+    console.log(totalpurchasebymonth)
+
+    res.status(200).json({
+        success:true,
+        totalpurchasebymonth
     })
 });

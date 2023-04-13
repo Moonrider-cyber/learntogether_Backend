@@ -27,13 +27,21 @@ exports.completePayment = catchAsyncError(async (req,res,next)=>{
         }
     })
     let course = null;
-    cartcourses.forEach(async (item)=>{
-        course = await Course.findByIdAndUpdate(item.courseid,{
-            $inc:{
-                totalpurchase:1
-            }
-        })
-    })
+    // await cartcourses.forEach(async (item)=>{
+    //     course = await Course.findByIdAndUpdate(item.courseid,{
+    //         $inc:{
+    //             totalpurchase:1
+    //         }
+    //     })
+    // })
+    await Promise.all(cartcourses.map(async (item) => {
+        const course = await Course.findByIdAndUpdate(item.courseid, {
+          $inc: {
+            totalpurchase: 1
+          }
+        });
+      }));
+      
 
 
     const userdetails = [{
@@ -71,19 +79,28 @@ exports.getAllPayments = catchAsyncError(async(req,res,next)=>{
     }
 
     let paymentsData = [];
-    // Loop through each payment and fetch the corresponding course information
+
     for (let i = 0; i < payments.length; i++) {
+        
         let payment = payments[i];
-        let course = await Course.findById(payment.courses[0].courseid);
-        // Assuming that each payment can have only one course, and courseid is stored at index 0 of courses array
-        if(course){
-            paymentsData.push({payments:payment,course});
+        
+        for (let j = 0; j < payment.courses.length; j++) {
+            let course = await Course.findById(payment.courses[j].courseid);
+            if(course){
+                paymentsData.push({payments:payment,course});
+            }
+            
         }
+        
+        // let course = await Course.findById(payment.courses[0].courseid);
+   
+        // if(course){
+        //     paymentsData.push({payments:payment,course});
+        // }
     }
-    
+    // console.log(paymentsData)
     res.status(200).json({
         success:true,
-        payments,
         paymentsData
     })
 });
