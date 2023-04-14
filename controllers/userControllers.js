@@ -487,57 +487,6 @@ exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
     })
 })
 
-// get instructor payments
-exports.getInstructorPayments = catchAsyncError(async(req,res,next)=>{
-    
-    let user = await User.findById(req.user.id);
-
-    if(!user){
-        return next(new ErrorHander("user not found",404));
-    }
-    const mycourse = await Course.find({'createBy.creatorid':user._id});
-    const payments = await Payment.find({'courses.courseid':{$in:mycourse.map(item=>item._id)}}).populate('courses.courseid');
-    
-
-    // const allcoursesid = [];
-    // payments.forEach(payment => {
-    //     payment.courses.forEach(course => {
-    //         allcoursesid.push(course.courseid);
-    //     }); 
-    // });
-
-    // let paymentcoursesPromise = await Promise.all(
-    //     allcoursesid.map((item, index) => {
-    //       return Course.findById(item);
-    //     })
-    //   )
-    //   .then(courses => {
-    //     return courses;
-    //   });
-
-    //   let mycourse = await Promise.all(
-    //     paymentcoursesPromise.map((item, index) => {
-        
-    //         let createby = item.createBy[0].creatorid;
-    //         let userid = user._id;
-
-    //         if((createby).equals(userid)){
-    //             return item
-    //         };
-    //     })  
-    //   )
-        
-    //   mycourse = mycourse.filter(function(element) {
-    //     return typeof element !== 'undefined';
-    //   });
-      
-      
-    res.status(200).json({
-        success:true,
-        mypayments : payments 
-    })
-
-});
 
 // create review
 exports.createReview = catchAsyncError(async(req,res,next)=>{

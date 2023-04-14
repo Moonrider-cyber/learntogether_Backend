@@ -1,9 +1,9 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse, checkEnroll, getEnrollCourse, getInstructorPayments, createReview, getDashboardStats, deleteReview } = require('../controllers/userControllers');
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse, checkEnroll, getEnrollCourse, createReview, getDashboardStats, deleteReview } = require('../controllers/userControllers');
 const { isAuthenticatedUser, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
 const router = express.Router();
 const multer = require('multer');
-const { Instructorlogin, registerInstructor, Instructorlogout } = require('../controllers/instructorControllers');
+const { Instructorlogin, registerInstructor, Instructorlogout, getInstructorPayments } = require('../controllers/instructorControllers');
 const { completePayment, getAllPayments } = require('../controllers/paymentControllers');
 
 

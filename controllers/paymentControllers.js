@@ -91,14 +91,7 @@ exports.getAllPayments = catchAsyncError(async(req,res,next)=>{
             }
             
         }
-        
-        // let course = await Course.findById(payment.courses[0].courseid);
-   
-        // if(course){
-        //     paymentsData.push({payments:payment,course});
-        // }
     }
-    // console.log(paymentsData)
     res.status(200).json({
         success:true,
         paymentsData

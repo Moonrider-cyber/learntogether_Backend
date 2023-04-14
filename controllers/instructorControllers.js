@@ -5,6 +5,8 @@ const sendToken = require('../utils/jwtToken');
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
 const crypto = require('crypto');
+const Course = require('../models/courseModels');
+const Payment = require('../models/PaymentModel');
 
 // register user
 exports.registerInstructor = catchAsyncError( async(req,res,next)=>{
@@ -65,3 +67,38 @@ exports.Instructorlogout = catchAsyncError(async(req,res,next)=>{
         message:"logged out successfully"
     })
 })
+
+
+// get instructor payments
+exports.getInstructorPayments = catchAsyncError(async(req,res,next)=>{
+    
+    let user = await User.findById(req.user.id);
+
+    if(!user){
+        return next(new ErrorHander("user not found",404));
+    }
+    const mycourse = await Course.find({'createBy.creatorid':user._id});
+
+    const payments = await Payment.find({'courses.courseid':{$in:mycourse.map(item=>item._id)}}).populate('courses.courseid');
+   
+    let paymentsData = [];
+
+    for (let i = 0; i < payments.length; i++) {
+        
+        let payment = payments[i];
+        
+        for (let j = 0; j < payment.courses.length; j++) {
+            let course = await Course.findById(payment.courses[j].courseid);
+            if(course){
+                paymentsData.push({payments:payment,course});
+            }
+            
+        }
+    }
+      
+    res.status(200).json({
+        success:true,
+        mypayments : paymentsData 
+    })
+
+});
