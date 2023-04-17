@@ -90,7 +90,7 @@ exports.getCourseLectures = catchAsyncError(async(req,res,next)=>{
     }
 
     course.views += 1;
-    
+    course.save();
     res.status(200).json({
         success:true,
         lectures: course.lectures
@@ -217,6 +217,11 @@ exports.activeDeactiveCourse = catchAsyncError(async(req,res,next)=>{
     if(!course){
         return next(new ErrorHander("course not found",404));
     }
+
+    if(course.lectures.length === 0){
+        return next(new ErrorHander("you can't active this course",404));
+    }
+
     if(course.active == true) course.active=false
     else course.active=true
 

@@ -27,13 +27,6 @@ exports.completePayment = catchAsyncError(async (req,res,next)=>{
         }
     })
     let course = null;
-    // await cartcourses.forEach(async (item)=>{
-    //     course = await Course.findByIdAndUpdate(item.courseid,{
-    //         $inc:{
-    //             totalpurchase:1
-    //         }
-    //     })
-    // })
     await Promise.all(cartcourses.map(async (item) => {
         const course = await Course.findByIdAndUpdate(item.courseid, {
           $inc: {
