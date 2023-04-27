@@ -72,7 +72,7 @@ exports.getAllCourseadmin = catchAsyncError(async(req,res) =>{
     const resultPerPage = 5;
     const productCount = await Course.countDocuments();
     
-    const courses = await Course.find();
+    const courses = await Course.find().sort({createAt: -1});
 
     res.status(200).json({
         success:true,
@@ -242,7 +242,7 @@ exports.getAllReviews = catchAsyncError(async(req,res,next)=>{
     if(!courseid){
         return next(new ErrorHander("course not found",404));
     }
-    const course = await Course.find({ _id: courseid });
+    const course = await Course.find({ _id: courseid }).sort({createAt: -1});
     const reviews = course[0].reviews;
 
 
