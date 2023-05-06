@@ -1,6 +1,6 @@
 const ErrorHander = require('../utils/errorHander');
 
-module.exports = (err,req,res,next)=>{
+module.exports = (err,req,res)=>{
     err.statusCode = err.statusCode || 500
     err.message = err.message || "Internal Server Error";
 

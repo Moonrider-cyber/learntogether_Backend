@@ -1,8 +1,8 @@
 const express = require('express');
-const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse, checkEnroll, getEnrollCourse, createReview, getDashboardStats, deleteReview } = require('../controllers/userControllers');
-const { isAuthenticatedUser, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
-const router = express.Router();
 const multer = require('multer');
+const router = express.Router();
+const { registerUser, loginUser, logout, forgotPassword, getMyProfile, updateProfile, changePassword, resetPassword, addToCart, removeFromCart, updateProfilePicture, getAllUsers, updateUserRole, deleteUser, Adminlogout, Adminlogin, addWithRole, activeDeactiveUser, getCartCourse, checkEnroll, getEnrollCourse, createReview, deleteReview } = require('../controllers/userControllers');
+const { isAuthenticatedUser, isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
 const { Instructorlogin, registerInstructor, Instructorlogout, getInstructorPayments } = require('../controllers/instructorControllers');
 const { completePayment, getAllPayments } = require('../controllers/paymentControllers');
 
@@ -42,7 +42,6 @@ router.route("/removefromcart").delete( isAuthenticatedUser, removeFromCart);
 router.route("/admin/users").post(isAuthenticatedAdmin,getAllUsers);
 router.route("/admin/me").post( isAuthenticatedAdmin, getMyProfile);
 router.route("/admin/payments").post(isAuthenticatedAdmin,getAllPayments);
-router.route("/admin/stats").post(isAuthenticatedAdmin,getDashboardStats);
 router.route("/admin/logout").post(Adminlogout);
 router.route("/admin/review").delete(deleteReview);
 router.route("/admin/controluser/:id").post( isAuthenticatedAdmin, activeDeactiveUser);

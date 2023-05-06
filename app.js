@@ -6,7 +6,6 @@ const cors = require('cors');
 
 const errorMiddleware = require('./middleware/error');
 
-
 // config for env variables
 dotenv.config({path:"config.env"});
 

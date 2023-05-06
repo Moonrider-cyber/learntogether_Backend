@@ -1,6 +1,6 @@
 const express = require('express');
 const { getAllCourse,createCourse, updateCourse, deleteCourse, getCourseLectures, addCourseLectures, deleteLecture, activeDeactiveCourse, getAllCourseadmin, getAllCourseins, getAllReviews } = require('../controllers/courseControllers');
-const { autorizeRoles, isAuthenticatedAdmin, isAuthenticatedInstructor, isAuthenticatedUser } = require('../middleware/Auth');
+const {  isAuthenticatedAdmin, isAuthenticatedInstructor } = require('../middleware/Auth');
 const router = express.Router();
 // const  { singleupload }  = require('../middleware/multer.js');
 

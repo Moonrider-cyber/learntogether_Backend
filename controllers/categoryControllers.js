@@ -11,7 +11,7 @@ exports.createCategory = catchAsyncError(async (req,res,next)=>{
     if(categorydata) return next(new ErrorHander("Someone already took this course title",409));
 
 
-    const category = await Category.create({
+    await Category.create({
         name,
         description,
         createBy,
@@ -24,7 +24,7 @@ exports.createCategory = catchAsyncError(async (req,res,next)=>{
 });
 
 // get all Category
-exports.getAllCategory = catchAsyncError(async(req,res) =>{
+exports.getAllCategory = catchAsyncError(async(req,res,next) =>{
     
     const categoryCount = await Category.countDocuments();
 

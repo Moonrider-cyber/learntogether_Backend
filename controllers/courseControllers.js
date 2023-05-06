@@ -4,12 +4,11 @@ const catchAsyncError = require('../middleware/catchAsyncError');
 const ApiFeatures = require("../utils/apifeatures");
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
-const User = require("../models/UserModel");
 
-//create/add course -- Teacher
+// create/add course -- Teacher
 exports.createCourse = catchAsyncError(async (req,res,next)=>{
     
-    const {title,description,price,poster,catagory,createBy} = req.body;
+    const {title,description,price,catagory,createBy} = req.body;
     const file = req.file;
 
     if(price < 10) return next(new ErrorHander("Price can't be negative or less then 10",409));
@@ -69,7 +68,6 @@ exports.getAllCourseins = catchAsyncError(async(req,res) =>{
 // get all course admin
 exports.getAllCourseadmin = catchAsyncError(async(req,res) =>{
     
-    const resultPerPage = 5;
     const productCount = await Course.countDocuments();
     
     const courses = await Course.find().sort({createAt: -1});
@@ -196,7 +194,7 @@ exports.deleteLecture= catchAsyncError(async(req,res,next)=>{
     course.lectures.filter( item=>{
         if(item._id.toString() !== lectureId.toString()) return item;
     })
-    let newcourse = await Course.updateOne(
+     await Course.updateOne(
         {_id:courseId},
         {$pull:{lectures:{_id:lectureId}}},
     )

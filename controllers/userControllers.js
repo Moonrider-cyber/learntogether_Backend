@@ -7,7 +7,7 @@ const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail.js');
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
-const crypto = require('crypto');
+// const crypto = require('crypto');
 
 // register user
 exports.registerUser = catchAsyncError( async(req,res,next)=>{
@@ -30,8 +30,6 @@ exports.registerUser = catchAsyncError( async(req,res,next)=>{
             url:mycloud.secure_url,
         }
     });
-
-    const token = user.getJWTToken();
 
     sendToken(user,201,res,"Signup Successfully");
 } );
@@ -114,7 +112,7 @@ exports.Adminlogin = catchAsyncError (async(req,res,next)=>{
 });
 
 //logout user
-exports.logout = catchAsyncError(async(req,res,next)=>{
+exports.logout = catchAsyncError(async(req,res)=>{
 
     res.cookie("token", null ,{
         expires: new Date(Date.now()),
@@ -127,7 +125,7 @@ exports.logout = catchAsyncError(async(req,res,next)=>{
     })
 })
 //Admin logout user
-exports.Adminlogout = catchAsyncError(async(req,res,next)=>{
+exports.Adminlogout = catchAsyncError(async(req,res)=>{
 
     res.cookie("admintoken", null ,{
         expires: new Date(Date.now()),
@@ -165,7 +163,7 @@ exports.changePassword = catchAsyncError(async(req,res,next)=>{
 });
 
 // update profile
-exports.updateProfile = catchAsyncError(async(req,res,next)=>{
+exports.updateProfile = catchAsyncError(async(req,res)=>{
     const {name, email} = req.body;
 
     const user = await User.findById(req.user.id);
@@ -182,7 +180,7 @@ exports.updateProfile = catchAsyncError(async(req,res,next)=>{
 });
 
 // update profilePicture
-exports.updateProfilePicture = catchAsyncError(async(req,res,next)=>{
+exports.updateProfilePicture = catchAsyncError(async(req,res)=>{
     
     const user = await User.findById(req.user.id);
 
@@ -253,10 +251,10 @@ exports.resetPassword = catchAsyncError(async(req,res,next)=>{
     if(!token){
         return next(new ErrorHander("token not found",404));
     }
-    // console.log("req....",token);
 
-    const resetPasswordToken = crypto.createHmac("sha256",process.env.JWT_SECRET).update(token).digest("hex");
-    
+
+    // console.log("req....",token);
+    // const resetPasswordToken = crypto.createHmac("sha256",process.env.JWT_SECRET).update(token).digest("hex");
     // console.log("resettoken... after decrpt",resetPasswordToken);
 
     const user = await User.findOne({
@@ -326,7 +324,7 @@ exports.addToCart = catchAsyncError(async(req,res,next)=>{
     })
 })
 // get course that are in cart
-exports.getCartCourse = catchAsyncError(async(req,res,next)=>{
+exports.getCartCourse = catchAsyncError(async(req,res)=>{
     const user = await User.findById(req.user.id);
     
     const cartcourses = await Course.find({_id:{$in:user.cart.map(item=>item.course)}});
@@ -468,7 +466,7 @@ exports.getEnrollCourse = catchAsyncError(async(req,res,next)=>{
       });
     });
 
-    const filtercourses = courses.map((item, index) =>
+    const filtercourses = courses.map((item) =>
     {
         if(item === null){
             return false
@@ -518,7 +516,7 @@ exports.createReview = catchAsyncError(async(req,res,next)=>{
     course.numOfReviews = course.numOfReviews + 1;
     let totalRating = 0;
   
-    course.reviews.forEach((review,key)=>{
+    course.reviews.forEach((review)=>{
         totalRating += Number(review.rating);
     })
     
@@ -554,7 +552,7 @@ exports.deleteReview = catchAsyncError(async(req,res,next)=>{
     if(newcoursesreviews.length === 0){
         course.rating = 0;
     }else{
-        newcoursesreviews.forEach((review,key)=>{        
+        newcoursesreviews.forEach((review)=>{        
            newtotalrate += Number(review.rating);
         })
         course.rating = newtotalrate / course.numOfReviews;
@@ -565,23 +563,5 @@ exports.deleteReview = catchAsyncError(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         message:"review deleted"
-    })
-});
-
-
-// get dashboard stats
-exports.getDashboardStats = catchAsyncError(async(req,res,next)=>{
-    
-    let totalpurchase = await Course.find().sort({totalpurchase: -1});
-    
-    // get all months purchases with its month name
-    
-    
-
-    console.log(totalpurchasebymonth)
-
-    res.status(200).json({
-        success:true,
-        totalpurchasebymonth
     })
 });

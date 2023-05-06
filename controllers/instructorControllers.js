@@ -4,7 +4,6 @@ const User = require('../models/UserModel');
 const sendToken = require('../utils/jwtToken');
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
-const crypto = require('crypto');
 const Course = require('../models/courseModels');
 const Payment = require('../models/PaymentModel');
 
@@ -30,7 +29,6 @@ exports.registerInstructor = catchAsyncError( async(req,res,next)=>{
         }
     });
 
-    const token = user.getJWTToken();
 
     sendToken(user,201,res,"Signup Successfully","instructortoken");
 } );
@@ -56,7 +54,7 @@ exports.Instructorlogin = catchAsyncError (async(req,res,next)=>{
     sendToken(user,200,res,"Login Successfully","instructortoken"); 
 });
 //Instructor logout user
-exports.Instructorlogout = catchAsyncError(async(req,res,next)=>{
+exports.Instructorlogout = catchAsyncError(async(req,res)=>{
 
     res.cookie("instructortoken", null ,{
         expires: new Date(Date.now()),

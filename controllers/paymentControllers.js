@@ -2,7 +2,6 @@ const Course = require('../models/courseModels');
 const Payment = require("../models/PaymentModel");
 const ErrorHander = require("../utils/errorHander");
 const catchAsyncError = require('../middleware/catchAsyncError');
-const ApiFeatures = require("../utils/apifeatures");
 const User = require('../models/UserModel');
 
 
