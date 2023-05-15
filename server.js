@@ -20,6 +20,11 @@ cloudinary.v2.config({
     api_secret:process.env.CLOUDINARY_API_SECRET,
 });
 
+app.get('/',(req,res)=>{
+    res.send(`WELCOME TO BUSILEARN BACKEND, FRONTEND IS LIVE ON ${process.env.FRONTEND_URL}`);
+});
+
+
 const server = app.listen(8000,()=>{
     console.log('server runing on 8000');
 })

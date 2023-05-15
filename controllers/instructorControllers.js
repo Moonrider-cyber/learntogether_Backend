@@ -4,7 +4,7 @@ const User = require('../models/UserModel');
 const sendToken = require('../utils/jwtToken');
 const cloudinary = require('cloudinary');
 const getDataUri = require("../utils/datauri");
-const Course = require('../models/courseModels');
+const Course = require('../models/CourseModels');
 const Payment = require('../models/PaymentModel');
 
 // register user
