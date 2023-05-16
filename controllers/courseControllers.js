@@ -40,18 +40,27 @@ exports.createCourse = catchAsyncError(async (req,res,next)=>{
 // get all course
 exports.getAllCourse = catchAsyncError(async(req,res) =>{
     
-    const productCount = await Course.countDocuments();
+    try{
+        const productCount = await Course.countDocuments();
+        
+        const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter()
     
-    const apiFeatures = new ApiFeatures(Course.find(),req.query).search().filter()
-
-    const courses = await apiFeatures.query;
-
-    res.status(200).json({
-        success:true,
-        courses,
-        productCount,
-    })
+        const courses = await apiFeatures.query;
+    
+        res.status(200).json({
+            success:true,
+            courses,
+            productCount,
+        })
+    }
+    catch(error){
+        res.status(404).json({
+            success:false,
+            message:error.message,
+        })
+    }
 });
+
 // get all course
 exports.getAllCourseins = catchAsyncError(async(req,res) =>{
     
