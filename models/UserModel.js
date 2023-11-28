@@ -84,7 +84,6 @@ userSchema.methods.comparePassword = async function(enterdpassword){
     return await byrypt.compare(enterdpassword,this.password);
 };
 
-
 //genrating password reseting token
 
 userSchema.methods.getResetPwdToken = async function(){ 
@@ -100,8 +99,6 @@ userSchema.methods.getResetPwdToken = async function(){
     this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
     return this.resetPasswordToken;
 }
-
-
 
 // export
 module.exports = mongoose.model("User",userSchema);

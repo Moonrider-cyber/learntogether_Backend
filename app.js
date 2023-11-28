@@ -21,23 +21,22 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     optionSuccessStatus:200,
 }));
+// Middleware for errors
+app.use(errorMiddleware);
+
 
 // route imports
 const courseroute = require("./routes/CourseRoute")
-// const userroute = require("./routes/UserRoute")
-// const categoryroute = require("./routes/CategoryRoute")
+const userroute = require("./routes/UserRoute")
+const categoryroute = require("./routes/CategoryRoute")
 
 app.use("/api/v1",courseroute);
-// app.use("/api/v1",userroute);
-// app.use("/api/v1",categoryroute);
+app.use("/api/v1",userroute);
+app.use("/api/v1",categoryroute);
 
 app.get('/',(req,res)=>{
     res.send(`WELCOME TO BUSILEARN BACKEND`);
 });
-
-// Middleware for errors
-app.use(errorMiddleware);
-
 
 
 module.exports = app

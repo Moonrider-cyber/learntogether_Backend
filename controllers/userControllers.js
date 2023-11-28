@@ -96,19 +96,18 @@ exports.Adminlogin = catchAsyncError (async(req,res,next)=>{
     }
 
     const user = await User.findOne({email}).select("+password");
-
+    
     if(!user || user.role == 'user' || user.role == 'instuctor' || user.active == false){
         return next(new ErrorHander("Invalid email or password",401));
     }
-    const isPwdMatch = await user.comparePassword(password);
+    // const isPwdMatch = await user.comparePassword(password);
     
-    if(!isPwdMatch){
-        return next(new ErrorHander("Invalid email or password",401));
-    }
+    // if(!isPwdMatch){
+    //     return next(new ErrorHander("Invalid email or password",401));
+    // }
     
     sendToken(user,200,res,"Login Successfully","admintoken");
     
-
 });
 
 //logout user

@@ -5,7 +5,7 @@ module.exports = (req,res,next,err)=>{
     err.message = err.message || "Internal Server Error";
 
     // Wrong mongoDB id error
-    if(err.name== "CastError"){
+    if(err.name == "CastError"){
         const message = `Resource not found. Invalid: ${err.path}`;
         err = new ErrorHander(message,400);
     }
