@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jainex17/E_Learning_Backend.git"
+    "url": "git+https://github.com/Moonrider-cyber/learntogether_Backend.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Jainex17/E_Learning_Backend/issues"
+    "url": "https://github.com/Moonrider-cyber/learntogether_Backend/issues"
   },
-  "homepage": "https://github.com/Jainex17/E_Learning_Backend#readme",
+  "homepage": "https://github.com/Moonrider-cyber/learntogether_Backend",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
